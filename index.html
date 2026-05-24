@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Krystine Hall — Portfolio</title>
+<title>Krystine's Portfolio</title>
 <script src="d3.min.js"></script>
 <style>
   :root {
@@ -239,7 +239,7 @@
 <body>
 
 <nav>
-  <span class="nav-logo" onclick="switchTab('overview',null)" style="cursor:pointer;">Krystine Hall — Portfolio</span>
+  <span class="nav-logo" onclick="switchTab('overview',null)" style="cursor:pointer;">Krystine's Portfolio</span>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
     <button class="nav-tab" onclick="switchTab('cases',this)">Case Studies</button>
@@ -308,19 +308,19 @@
     <!-- HUB TRILOGY -->
     <div class="card case-card fade-in" onclick="toggleCase(this)">
       <div class="case-card-header">
-        <div><h3>The Hub Trilogy</h3><p class="subtitle">Team intelligence system — spreadsheet to 100-person enterprise production deployment across three builds</p></div>
+        <div><h3>The Hub Trilogy</h3><p class="subtitle">Team intelligence system — spreadsheet to 100-person Apple production deployment across three builds</p></div>
         <span class="case-toggle">Expand</span>
       </div>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Pydantic</span><span class="tag">SQLite</span><span class="tag">Docker</span><span class="tag">D3.js</span><span class="tag">Supabase</span><span class="tag">PostgreSQL</span><span class="tag">Enterprise PaaS</span><span class="tag">Enterprise SSO</span><span class="tag">Enterprise CI/CD</span><span class="tag">RBAC</span><span class="tag">DSID Identity</span>
+        <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Pydantic</span><span class="tag">SQLite</span><span class="tag">Docker</span><span class="tag">D3.js</span><span class="tag">Supabase</span><span class="tag">PostgreSQL</span><span class="tag">Apple Shuri</span><span class="tag">AppleConnect</span><span class="tag">Rio CI/CD</span><span class="tag">RBAC</span><span class="tag">DSID Identity</span>
       </div>
       <p class="case-summary">Three builds. One through-line. The spreadsheet was the schema. The public site was the interface lab. The Supabase build validated the backend. The Shuri deployment was the capstone. Each build had a specific job. The three versions aren't iterations of the same project — they're the process: figure out how to build it, prove the backend works, then ship the real thing.</p>
       <div class="case-expanded">
         <div class="case-expanded-inner">
-          <div class="stage"><strong>Background</strong><p>When the a global compliance team expanded from 13 people to 100 globally, the coordination infrastructure didn't scale. There was no central view of what projects were active, who was working on them, or what the team's collective skills looked like. Leads couldn't answer basic questions: who has capacity right now? Who knows how to do X? What are we actually working on? The starting point was a spreadsheet — a form sent to the full team asking for their skills, expertise, hobbies, and current work. Those responses became the bones of the data model. The data existed before the system did.</p></div>
+          <div class="stage"><strong>Background</strong><p>When the SDS Compliance team expanded from 13 people to 100 globally, the coordination infrastructure didn't scale. There was no central view of what projects were active, who was working on them, or what the team's collective skills looked like. Leads couldn't answer basic questions: who has capacity right now? Who knows how to do X? What are we actually working on? The starting point was a spreadsheet — a form sent to the full team asking for their skills, expertise, hobbies, and current work. Those responses became the bones of the data model. The data existed before the system did.</p></div>
           <div class="stage"><strong>Stage 1 — Team Intelligence Hub</strong><a href="https://thevillanelle.github.io/team-intelligence-hub">thevillanelle.github.io/team-intelligence-hub</a><p>The learning build. Single HTML file, data embedded as JavaScript objects, deployed via GitHub Pages. The goal wasn't to ship a product — it was to answer: what does this actually need to do, and how do I build it? Core UI patterns worked out here: project cards, profile cards with traffic-light availability indicators (green/yellow/red based on project count), skills search, D3.js force graph for team connections. PIN-gated admin layer stood in for real authentication. All data hardcoded and static. Getting the interface right in the cheapest possible environment meant that by the time a real backend was needed, the product logic was already settled.</p></div>
           <div class="stage"><strong>Stage 2 — m'atelier Studio</strong><a href="https://thevillanelle.github.io/studio">thevillanelle.github.io/studio</a><p>The backend proof of concept. Domain shifted to personal project management, but the architecture question was the same: can this system persist real data, sync across devices, handle writes without a server? Supabase answered: PostgreSQL + REST API + Row Level Security, zero infrastructure to manage. Schema designed from scratch: team_members (work_skills[], non_work[], hobbies[], private_note), projects (task_1/2/3, volunteer_need, contact_id FK), project_assignments (role_label), knowledge_nodes (category, weight 1–5 foundational scale), member_knowledge junction. The fetch calls in the frontend mapped almost 1:1 to what the FastAPI layer would later do in production. This version also introduced the knowledge mind map: a D3 force graph spanning Web Dev, Data Viz, Infrastructure, AI Tools, Design, Strategy, Security, Finance, and Blockchain. Labels appear progressively as you zoom in — category tags at scale > 0.5, full labels at > 1.1, description snippets at > 3. Three separate SVG text layers managed independently.</p></div>
-          <div class="stage"><strong>Stage 3 — Skills Hub (Production)</strong><a href="https://thevillanelle.github.io/team-intelligence-hub">thevillanelle.github.io/team-intelligence-hub</a><p>The full version: real authentication, real persistence, real deployment, real users. System architecture: Browser → HTTPS → the enterprise PaaS, which injects x-user-email + x-user-id (DSID) headers → FastAPI (Python 3.12, Uvicorn ASGI) → SQLite (WAL mode, seeded from employee JSON on first boot). Why FastAPI: Pydantic models gave automatic request validation and typed contracts. Async lifespan hooks handled DB initialization cleanly. Self-documenting API at no extra cost. Why SQLite with WAL mode: at 100 users with read-heavy patterns, a managed database would have been overengineered. Write-Ahead Logging handled concurrency safely. Choosing not to use a managed database was the right call. Identity resolution: The PaaS injects x-user-email and x-user-id headers on every authenticated request — confirmed by building a debug endpoint and dumping live request headers in production. Final implementation checks DSID first (immutable), falls back to email, falls back to DEV_USER_EMAIL for local dev. Deployment: ci.yml defines the CI/CD pipeline — vessel build, Memento signing, push to enterprise container registry, deploy to platform via deploy.yaml. Fires on every push to main. Two-region (us-west-2 + us-east-1) with traffic-based autoscaling. Dockerfile uses multi-stage build with non-root appuser — a Shuri requirement and container security best practice.</p></div>
+          <div class="stage"><strong>Stage 3 — Skills Hub (Production)</strong><a href="https://sinkneonanaconda.shuri.apple.com">sinkneonanaconda.shuri.apple.com</a><p>The full version: real authentication, real persistence, real deployment, real users. System architecture: Browser → HTTPS → Shuri (Apple PaaS, injects x-user-email + x-user-id DSID headers) → FastAPI (Python 3.12, Uvicorn ASGI) → SQLite (WAL mode, seeded from employee JSON on first boot). Why FastAPI: Pydantic models gave automatic request validation and typed contracts. Async lifespan hooks handled DB initialization cleanly. Self-documenting API at no extra cost. Why SQLite with WAL mode: at 100 users with read-heavy patterns, a managed database would have been overengineered. Write-Ahead Logging handled concurrency safely. Choosing not to use a managed database was the right call. Identity resolution: Shuri injects x-user-email and x-user-id headers on every authenticated request — confirmed by building a debug endpoint and dumping live request headers in production. Final implementation checks DSID first (immutable), falls back to email, falls back to DEV_USER_EMAIL for local dev. Deployment: rio.yml defines the CI/CD pipeline — vessel build, Memento signing, push to docker.apple.com, deploy to Shuri via deploy.yaml. Fires on every push to main. Two-region (us-west-2 + us-east-1) with traffic-based autoscaling. Dockerfile uses multi-stage build with non-root appuser — a Shuri requirement and container security best practice.</p></div>
           <div class="stage"><strong>The Standing System</strong><p>The availability traffic light answers one question: what is this person's current bandwidth? Standing answers a different question: has this person been reviewed by their lead recently? Every 90 days, all standing values automatically flip to red. On sign-in, team leads see an alert for their direct reports and must confirm each one, resetting to green with a timestamp. Leads can manually flag someone red at any time with a required written note. The 90-day trigger is a forcing function, not a reminder. Confirmation is required, not optional. The timestamp is stored — the review history is auditable. An earlier version ran two separate cycles (90-day eligibility reset and 60-day standing review). Identifying that redundancy and collapsing it into one coherent system — one mechanism, one cycle, two surfaces — was a design improvement shipped during active development.</p></div>
           <div class="stage"><strong>API Surface</strong><p>
             /api/health — GET — Public (health probe)<br>
@@ -337,7 +337,7 @@
             /api/audit — GET — All authenticated<br>
             /api/audit/csv — GET — Admin (real-time export of all 100 team members with standing, review timestamp, notes, manager, and active project assignments — replaced a manual spreadsheet process entirely)
           </p></div>
-          <div class="outcome"><strong>Outcome</strong><p>Production system live on enterprise internal infrastructure. Two-region deployment. 100 users. Full audit and standing confirmation system replacing manual spreadsheet processes. Public portfolio version (thevillanelle.github.io/team-intelligence-hub) accessible from any network with zero external dependencies. Supabase-backed personal version (thevillanelle.github.io/studio) validating the PostgreSQL approach that informed the production design. End-to-end solo: concept, data collection, design, development, and deployment.</p></div>
+          <div class="outcome"><strong>Outcome</strong><p>Production system live on Apple's internal infrastructure. Two-region deployment. 100 users. Full audit and standing confirmation system replacing manual spreadsheet processes. Public portfolio version (thevillanelle.github.io/team-intelligence-hub) accessible from any network with zero external dependencies. Supabase-backed personal version (thevillanelle.github.io/studio) validating the PostgreSQL approach that informed the production design. End-to-end solo: concept, data collection, design, development, and deployment.</p></div>
         </div>
       </div>
     </div>
@@ -351,7 +351,7 @@
       <div class="tags">
         <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Fuse.js</span><span class="tag">D3.js</span><span class="tag">Custom Scoring</span><span class="tag">Fisher-Yates</span><span class="tag">CSS Custom Properties</span><span class="tag">localStorage</span><span class="tag">IntersectionObserver</span><span class="tag">GitHub Pages</span><span class="tag">GitHub Actions</span>
       </div>
-      <p class="case-summary">The team had no searchable knowledge base, no interactive decision tool, and no training simulator. This built all four — plus a standalone geography training game — with zero backend, zero build step, and zero dependencies. The entire platform is a single index.html — 2,700+ lines of pure HTML, CSS, and JavaScript. Deployed to the internal network. Works on mobile.</p>
+      <p class="case-summary">The team had no searchable knowledge base, no interactive decision tool, and no training simulator. This built all four — plus a standalone geography training game — with zero backend, zero build step, and zero dependencies. The entire platform is a single index.html — 2,700+ lines of pure HTML, CSS, and JavaScript. Deployed to Apple's internal network. Works on mobile.</p>
       <div class="case-expanded">
         <div class="case-expanded-inner">
           <div class="stage"><strong>Background</strong><p>The investigations team works a high-stakes queue: sanctions screening across multiple clients (AMP, WWDR, IdMS), four case types, dozens of edge cases, and procedure documents scattered across an internal site with broken deep links and a Cross-Origin-Opener-Policy header that blocks direct external navigation. New investigators had to learn the system by reading dense procedure docs in isolation, with no way to practice before hitting a live queue. The tools existed. The training infrastructure didn't. The gap between "read the procedure" and "work a case confidently" was the problem to solve.</p></div>
@@ -360,7 +360,7 @@
           <div class="stage"><strong>The Trials — Training Simulator</strong><p>40 scenarios across three difficulty levels. Each scenario presents a realistic compliance case: screened entity name, location, PII status, matched data hits, client and event type. Investigators choose the correct action from four options and receive immediate feedback. Wrong answers are treated as the most educational outcome — every incorrect answer shows the full correct reasoning before advancing. The game tracks score, lives (3 per session), rank progression (Trainee through Lead Investigator), case count, and streak (+50 bonus at 3+ consecutive). Scenarios shuffle on each session start using Fisher-Yates, ensuring no two sessions have the same case order. Difficulty design: Initiate (13 scenarios) — clear variances, single-factor decisions, entity type mismatches, false positives. Investigator (13 scenarios) — China naming conventions, 2/3 name match with MZ account age, expired PII, AKA traps, YOB shortcuts. Olympian (14 scenarios) — full address match exception, ownership percentages, previously suspended companies, the deceased-date-only escalation, system notes traps, the gibberish flag, the Iran connection override.</p></div>
           <div class="stage"><strong>Where in the World? — Geography Training Game</strong><p>A standalone geography and language identification game embedded in the platform. Four modes, 135 questions: Script Intel (identify writing systems from examples, including compliance-critical cases like 조선 and ایران), Country Decoder (identify countries from native-language names, including all three sanctioned countries), Name Origins (identify geographic origin: Zhang Wei, José, Reza, Nguyễn, Giuseppe), Sanctioned or Safe? (39 questions covering all three sanctioned countries, all five Ukrainian sanctioned regions, and real city-level address scenarios). Compliance-critical questions flagged red, worth 150 points. An investigator who can't recognize that ایران is "Iran" in Persian script is more likely to miss a true match. Geography training is compliance training.</p></div>
           <div class="stage"><strong>Location Themes + Tools Page</strong><p>Nine distinct visual themes — one per office where the team operates: Austin, Elk Grove, San Diego, Arizona, Raleigh, Boston, New York, Singapore, and a default Global theme. Each theme remaps the full CSS custom property set with location-specific visual signatures: brick patterns for Boston, a neon grid for Singapore, a lone-star watermark for Austin, a sunset radial for San Diego. Theme and dark/light toggle persist in localStorage. The themes weren't cosmetic — investigators in Singapore and Raleigh see the same product built for them specifically. The Tools page houses corrected date conversion utilities for Japanese imperial era dates and Taiwanese ROC calendar dates. The Japanese converter corrects an identified error in the official Job Aids page: the Shōwa era formula shown on the Job Aids site is off by one year. The correction (Shōwa Year 1 = 1926, not 1927) is documented, sourced (JACAR archives), and flagged with a visible warning banner. The error was identified by an investigator in production; the correction was shipped here while the official Job Aids team was notified.</p></div>
-          <div class="outcome"><strong>Outcome</strong><p>Full training and reference platform live on the internal network, accessible via VPN from any device. 40 compliance training scenarios across 3 difficulty levels. 135-question geography training game with compliance-critical flagging. Interactive decision matrix for all 4 case types. Searchable knowledge base with 40+ glossary terms and full procedure document summaries. Corrected date conversion tools with documented bug fix. 9 location-specific visual themes covering every office. Zero external dependencies, zero backend, zero build infrastructure — deployed as a single file. Full platform: <a href="https://thevillanelle.github.io/risk-training-academy/" target="_blank">thevillanelle.github.io/risk-training-academy</a></p></div>
+          <div class="outcome"><strong>Outcome</strong><p>Full training and reference platform live on Apple's internal network, accessible via VPN from any device. 40 compliance training scenarios across 3 difficulty levels. 135-question geography training game with compliance-critical flagging. Interactive decision matrix for all 4 case types. Searchable knowledge base with 40+ glossary terms and full procedure document summaries. Corrected date conversion tools with documented bug fix. 9 location-specific visual themes covering every office. Zero external dependencies, zero backend, zero build infrastructure — deployed as a single file. Full platform: <a href="https://pages.github.pie.apple.com/thekrystine/compliance-k-base/#training" target="_blank">pages.github.pie.apple.com/thekrystine/compliance-k-base</a></p></div>
         </div>
       </div>
     </div>
@@ -399,7 +399,7 @@
       <div class="case-expanded">
         <div class="case-expanded-inner">
           <div class="stage"><strong>Stage 1 — EEC Rotation Training Site</strong><p>The engagement team's onboarding material was a document. Fourteen tools to learn, spread across wikis and shared folders, with no priority ordering, no progress tracking, no single landing place. The first build turned it into an SPA: 14 tool cards organized by priority tier (High/Medium/Low/Additional), a sticky live progress bar, staggered card entrance animations, and a visual onboarding timeline showing which tools to hit in weeks 1, 2, and 3. Checkboxes persist via localStorage — progress survives a page refresh. Password reveal chips for internal tool credentials. Light/dark toggle. The design choice was deliberate: a progress bar at 0% is motivating in a way that a bullet list is not.</p></div>
-          <div class="stage"><strong>Stage 2 — AHA After School Hangout</strong><p>A fully planned and successfully executed virtual team engagement event — a retro arcade aesthetic (CRT scanline overlay, neon glow, Press Start 2P pixel font, animated neon-pulse hero title, full light/dark/accessibility mode trifecta). Five game categories: Arcade Classics (Atari Breakout, Minesweeper, Bejeweled — high score competition), Creative and Social (Codenames, Gartic Phone), Brain Teasers (Skribbl.io, Openguessr, Kahoot!), Variety Packs (Pogo, Google Arts and Culture), and an After School Special watch section (Magic School Bus, Totally Spies, Looney Tunes). Three prize categories — Activity Passport Champion, High Score Heroes, and Raffle — with tooltip hover reveals. The submission flow validates @company.com email, opens a pre-filled mailto: with the entry structured as a formatted email body. On submit, the form replaces itself with a success state. The event ran. It was a success. Public event hub: <a href="https://thevillanelle.github.io/gather/" target="_blank">thevillanelle.github.io/gather</a></p></div>
+          <div class="stage"><strong>Stage 2 — AHA After School Hangout</strong><p>A fully planned and successfully executed virtual team engagement event — a retro arcade aesthetic (CRT scanline overlay, neon glow, Press Start 2P pixel font, animated neon-pulse hero title, full light/dark/accessibility mode trifecta). Five game categories: Arcade Classics (Atari Breakout, Minesweeper, Bejeweled — high score competition), Creative and Social (Codenames, Gartic Phone), Brain Teasers (Skribbl.io, Openguessr, Kahoot!), Variety Packs (Pogo, Google Arts and Culture), and an After School Special watch section (Magic School Bus, Totally Spies, Looney Tunes). Three prize categories — Activity Passport Champion, High Score Heroes, and Raffle — with tooltip hover reveals. The submission flow validates @apple.com email, opens a pre-filled mailto: with the entry structured as a formatted email body. On submit, the form replaces itself with a success state. The event ran. It was a success. Public event hub: <a href="https://thevillanelle.github.io/gather/" target="_blank">thevillanelle.github.io/gather</a></p></div>
           <div class="stage"><strong>Stage 3 — Engagement Hub</strong><p>The event proved the model. It also surfaced the planning problem: no system for figuring out what kind of event to run, who was available when, or what the team actually wanted. Four modules: (1) Event Planning Portal — a 10-step questionnaire that scores 12 event blueprints against input, weighted by category match, format, budget, headcount, feeling goal, energy, and context. Results render as ranked recommendation cards with expandable logistics checklists and Webex integration tips. (2) AI Agent Setup Guide — step-by-step guide for building a custom Enchanté agent for EEC event planning with a copyable starter system prompt, token explainer, and 6-entry FAQ accordion. (3) Join the Team — 10-step employee intake survey collecting name, team, city, work arrangement, birthday/Appleversary, energizers (multi-select chips), time preference, event types, group size preference, dietary needs, and open notes. Profile saves to localStorage and feeds Module 4. (4) What We Love — A force-directed canvas interest graph built without D3, custom physics engine in raw JavaScript. 22 interest nodes (Time Preference, Energizers, Event Types, Group Size) orbit in a ring. Member dots connect to their linked interest nodes via spring physics. Drag-to-pan, scroll-to-zoom, hover tooltips with member name, team, location, and interest cluster. Category filter buttons. Live search by name. Insight bar showing top interests ranked by frequency. The graph isn't decorative — it answers the question event planners need answered before they plan anything.</p></div>
           <div class="stage"><strong>Stage 4 — The Proximity Summit</strong><a href="https://thevillanelle.github.io" target="_blank">thevillanelle.github.io</a><p>~150 employees working from home across 40+ cities — no dedicated programming, limited leadership access, no shared experience that makes a dispersed community feel like one. The Proximity Summit is a fully designed, fully documented proposal for a 4-day annual virtual summit. The proposal site is a full SPA with fixed nav, Leaflet.js map, tabbed agenda, accordion FAQ, and a master 20-week project timeline. Dark/light toggle with CartoDB tile layer swap on the map. The map reveal: 150 dots, one per employee, distributed across 40+ cities — no words needed for the first few seconds, just scale. Dots rendered as styled divIcons with glow shadows, population-weighted using 50 real US city coordinates with per-city jitter, geographic bounds checking to prevent dots from landing in Mexico. Four days with distinct identities: Day 1 (Open) — map reveal, icebreaker, growth panels, Coffee With space open; Day 2 (Showcase) — AHA Showcase goes live, peer submissions featured; Day 3 (Grow) — deepest panels, leader 1:1 slots; Day 4 (Close) — AI Wrapped experience, Virtual Arcade offsite. Hourly employee protection framework: session tagging system (🟢 Drop In, 🟡 Schedule Required, 🔵 Sign Up, 🟣 Leader Present), manager pre-clearance, pre-allocated time budgets. Six leader participation tiers. 17-question leader FAQ written from the leader's perspective, answered honestly. Budget: $15K total versus $100K+ for an in-person equivalent.</p></div>
           <div class="outcome"><strong>What These Builds Demonstrate Together</strong><p>Each build did something the previous one couldn't. An event can't collect team preferences. A preference tool can't make an investment case. The case is only credible because the previous builds exist. Through-line: no gap was just identified and named. Each one was answered with something built. Interactive onboarding checklist with live progress tracking, replacing a static document. Successful virtual event planned, executed, and hosted end-to-end. Full event planning portal scoring 12 blueprints. Custom force-directed interest map with raw JS physics, filter, zoom, and hover tooltips. Full summit proposal site with Leaflet map, tabbed agenda, hourly employee protection framework, 6-tier leader model, 17-question FAQ, and master project timeline.</p></div>
@@ -422,8 +422,8 @@
           <div class="stage"><strong>Background</strong><p>SDS had an investigator idea submission program. Compliance didn't. As the team expanded, there was no structured way for investigators to surface ideas, no place for leadership to track them, and no visibility into what was being considered or actioned. The gap was identified and the case for a compliance-specific program was made.</p></div>
           <div class="stage"><strong>Phase 1 — Building the Pipeline</strong><p>The design constraint was adoption: a system that required new tools or new behaviors wouldn't get used. The pipeline was built entirely on Slack and Quip — tools the team already had open every day. A Slack workflow was designed and deployed as the submission interface. Investigators fill out a structured form — name, category, idea description, business impact — without leaving Slack. The workflow populates a purpose-built Quip tracking spreadsheet automatically, giving leadership a centralized, real-time view of all submissions. Built in partnership with Sarah. Handed off to Julianne as program leader, responsible for day-to-day management, idea evaluation, and working submissions with the broader leadership team.</p></div>
           <div class="stage"><strong>The Gap Identified</strong><p>Quarterly presentations were established as the communication mechanism after handoff. Through those presentations, a structural problem became clear: investigators were submitting ideas and hearing nothing back. No acknowledgment, no status update, no close-out. They had no way to know whether their idea had been seen, considered, actioned, or shelved. The quarterly format was reporting to leadership, not communicating back to investigators. Something in the architecture needed to change.</p></div>
-          <div class="stage"><strong>Phase 2 — Closing the Loop</strong><p>A new system was designed with one binding constraint: it couldn't add workload to the leadership team already running the program. All trigger points had to map to things leaders were already doing in Quip. Quip structural redesign: clearly designated internal notes column (excluded from all automated outputs), Actions Taken column as single source of truth for close-out communications, format guidelines defined to ensure clean AI agent output. Quip-to-Slack integration: edits to the document — including the Complete checkbox trigger — post automatically to the channel. A leader notification step was also added to the original Slack workflow, triggering an alert on every new submission. Four email templates, designed and copy-edited to organizational voice standards, mapped to the four states an idea can be in: Stage 1 (submission confirmation), Stage 2 (active review notification, triggered when the first Actions Taken entry is logged), Stage 3A (implemented — full close-out with a dated timeline compiled from the Actions Taken history), Stage 3B (tabled/declined — honest, respectful close-out with clear reasoning and an actionable next step). Every trigger point maps to an action a leader was already taking. No new behaviors required.</p></div>
-          <div class="stage"><strong>The Custom AI Agent</strong><p>A custom agent was built in Enchanté and connected to the Quip document via MCP (Model Context Protocol) integration. The agent reads live data directly from the spreadsheet, compiles the Actions Taken history, and produces a formatted, policy-compliant email draft on demand — in the correct organizational voice, with team member names never surfaced to investigators. Any team member can generate the correct email for any stage with a single sentence prompt. The agent's instructions, constraints, tone standards, privacy rules, and operational logic were written from scratch. The goal was a tool any member of the team could pick up and use correctly without knowing how it was built.</p></div>
+          <div class="stage"><strong>Phase 2 — Closing the Loop</strong><p>A new system was designed with one binding constraint: it couldn't add workload to the leadership team already running the program. All trigger points had to map to things leaders were already doing in Quip. Quip structural redesign: clearly designated internal notes column (excluded from all automated outputs), Actions Taken column as single source of truth for close-out communications, format guidelines defined to ensure clean AI agent output. Quip-to-Slack integration: edits to the document — including the Complete checkbox trigger — post automatically to the channel. A leader notification step was also added to the original Slack workflow, triggering an alert on every new submission. Four email templates, designed and copy-edited to Apple voice standards, mapped to the four states an idea can be in: Stage 1 (submission confirmation), Stage 2 (active review notification, triggered when the first Actions Taken entry is logged), Stage 3A (implemented — full close-out with a dated timeline compiled from the Actions Taken history), Stage 3B (tabled/declined — honest, respectful close-out with clear reasoning and an actionable next step). Every trigger point maps to an action a leader was already taking. No new behaviors required.</p></div>
+          <div class="stage"><strong>The Custom AI Agent</strong><p>A custom agent was built in Enchanté and connected to the Quip document via MCP (Model Context Protocol) integration. The agent reads live data directly from the spreadsheet, compiles the Actions Taken history, and produces a formatted, policy-compliant email draft on demand — in Apple voice, with team member names never surfaced to investigators. Any team member can generate the correct email for any stage with a single sentence prompt. The agent's instructions, constraints, tone standards, privacy rules, and operational logic were written from scratch. The goal was a tool any member of the team could pick up and use correctly without knowing how it was built.</p></div>
           <div class="stage"><strong>Program Asset Suite</strong><p>Leader program overview (visual explainer of the full pipeline, PDF-ready and email-safe). Investigator guide (plain-language visual guide including what communications to expect at each stage and when). Full email journey reference (all four templates in sequence with trigger annotations). Seed Your Ideas: Compliance setup guide (step-by-step Enchanté onboarding with agent instructions ready to copy and deploy). General Enchanté getting started guide (broader onboarding covering GenAI training, Homebrew, L'Atelier, MCP servers, tokens, and custom agent creation). Leadership elevator pitch. Investigator Slack blast.</p></div>
           <div class="outcome"><strong>Outcome</strong><p>43+ ideas collected across multiple submission cycles. Over half actioned or completed, with documented outcomes for each. 4 email templates designed, copy-edited, and ready to deploy against the existing backlog. 1 custom AI agent live and operational — close-out email drafting reduced to a single prompt. 6 program documents covering leadership, investigators, and team onboarding. Zero additional tooling required — the full system runs on Slack, Quip, and Enchanté. Zero ongoing maintenance burden — the agent handles drafting, Quip-to-Slack handles alerting. Any team member can run the program end-to-end using the shared documentation and agent.</p></div>
         </div>
@@ -448,19 +448,19 @@
     <div class="resume-view active" id="resume-engagement">
       <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);">
         <h2 style="font-size:24px;font-weight:700;color:var(--text);margin-bottom:2px;">Krystine Hall</h2>
-        <p style="font-size:14px;color:var(--text-2);"><a href="mailto:thevillanelle@protonmail.com" style="color:var(--blue);">thevillanelle@protonmail.com</a> &nbsp;·&nbsp; <a href="https://github.com/thevillanelle" style="color:var(--blue);">github.com/thevillanelle</a> &nbsp;·&nbsp; Employee Engagement &amp; Communications</p>
+        <p style="font-size:14px;color:var(--text-2);"><a href="mailto:thevillanelle@protonmail.com" style="color:var(--blue);">thevillanelle@protonmail.com</a> &nbsp;·&nbsp; <a href="https://github.com/thevillanelle" style="color:var(--blue);">github.com/thevillanelle</a> &nbsp;·&nbsp; SDS Employee Engagement &amp; Communications</p>
       </div>
       <div class="resume-profile">
         <div class="resume-section-label">Profile</div>
-        <p>Technology industry veteran with 12+ years of experience designing programs, experiences, and communications that build connection, amplify culture, and drive performance across distributed, global teams. Known for translating ambiguous organizational needs into polished, high-impact engagement initiatives — from digital experiences and virtual events to recognition programs and team-wide campaigns. Equally adept at strategic thinking and end-to-end execution, with a track record of earning trust across all levels of leadership and delivering work that resonates at scale.</p>
+        <p>Apple veteran with 12+ years of experience designing programs, experiences, and communications that build connection, amplify culture, and drive performance across distributed, global teams. Known for translating ambiguous organizational needs into polished, high-impact engagement initiatives — from digital experiences and virtual events to recognition programs and team-wide campaigns. Equally adept at strategic thinking and end-to-end execution, with a track record of earning trust across all levels of leadership and delivering work that resonates at scale.</p>
       </div>
       <div class="resume-section-label">Experience</div>
       <div class="job">
-        <div class="job-header"><span class="job-title">Employee Engagement Coordinator (Rotation)</span><span class="job-date">2025 – Present</span></div>
+        <div class="job-header"><span class="job-title">SDS Employee Engagement Coordinator (Rotation)</span><span class="job-date">2025 – Present</span></div>
         <p class="job-company">Apple · Strategic Data Solutions — Employee Engagement &amp; Communications</p>
         <ul>
-          <li>Designed and delivered the complete virtual experience for an org-wide event — end-to-end UX design in Miro, built the accompanying microsite, secured org-wide provisioning through Workforce Operations, managed day-of communications across all sites.</li>
-          <li>Planned, designed, and launched a full internal engagement site on GitHub Enterprise — digital hub for a team-wide gamified engagement program with activity tracking, prize submission, and cross-functional participation.</li>
+          <li>Designed and delivered the complete virtual experience for SDS Days — end-to-end UX design in Miro, built the accompanying microsite, secured org-wide provisioning through Workforce Operations, managed day-of communications across all sites.</li>
+          <li>Planned, designed, and launched a full internal engagement site on Apple's GitHub Enterprise — digital hub for a team-wide gamified engagement program with activity tracking, prize submission, and cross-functional participation.</li>
           <li>Lead the at-home engagement committee, driving strategy and execution for remote employee engagement across SDS regions.</li>
           <li>Design, develop, and maintain web content and digital engagement assets across Slack, email, and WebEx to drive participation and optimize team experience.</li>
           <li>Support editorial calendar management and project coordination in Wrike across a multi-region, globally distributed organization.</li>
@@ -507,19 +507,19 @@
     <div class="resume-view" id="resume-tech">
       <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);">
         <h2 style="font-size:24px;font-weight:700;color:var(--text);margin-bottom:2px;">Krystine Hall</h2>
-        <p style="font-size:14px;color:var(--text-2);"><a href="mailto:thevillanelle@protonmail.com" style="color:var(--blue);">thevillanelle@protonmail.com</a> &nbsp;·&nbsp; <a href="https://github.com/thevillanelle" style="color:var(--blue);">github.com/thevillanelle</a> &nbsp;·&nbsp; a global compliance Investigations &amp; Employee Engagement</p>
+        <p style="font-size:14px;color:var(--text-2);"><a href="mailto:thevillanelle@protonmail.com" style="color:var(--blue);">thevillanelle@protonmail.com</a> &nbsp;·&nbsp; <a href="https://github.com/thevillanelle" style="color:var(--blue);">github.com/thevillanelle</a> &nbsp;·&nbsp; SDS Compliance Investigations &amp; Employee Engagement</p>
       </div>
       <div class="resume-profile">
         <div class="resume-section-label">Profile</div>
-        <p>Technology industry veteran with 12+ years of experience spanning retail technology, enterprise compliance, and enterprise IS&amp;T ecosystems. Brings deep hands-on hardware and software expertise alongside a security-minded, process-driven approach to complex, high-stakes investigations. Known for building trust across all levels of leadership, driving continuous improvement, and communicating clearly in fast-paced, distributed environments. Proven across three major US markets and global initiatives.</p>
+        <p>Apple veteran with 12+ years of experience spanning retail technology, enterprise compliance, and Apple's IS&amp;T ecosystem. Brings deep hands-on hardware and software expertise alongside a security-minded, process-driven approach to complex, high-stakes investigations. Known for building trust across all levels of leadership, driving continuous improvement, and communicating clearly in fast-paced, distributed environments. Proven across three major US markets and global initiatives.</p>
       </div>
       <div class="resume-section-label">Experience</div>
       <div class="job">
-        <div class="job-header"><span class="job-title">Employee Engagement Coordinator (Rotation)</span><span class="job-date">2025 – Present</span></div>
+        <div class="job-header"><span class="job-title">SDS Employee Engagement Coordinator (Rotation)</span><span class="job-date">2025 – Present</span></div>
         <p class="job-company">Apple · Strategic Data Solutions — Employee Engagement &amp; Communications</p>
         <ul>
-          <li>Planned, designed, and launched a full internal engagement site on GitHub Enterprise — digital hub for a team-wide gamified engagement program with activity tracking, prize submission, and cross-functional participation.</li>
-          <li>Designed and delivered the complete virtual experience for an org-wide event — end-to-end UX in Miro, built the microsite, secured Workforce Operations provisioning, managed day-of communications.</li>
+          <li>Planned, designed, and launched a full internal engagement site on Apple's GitHub Enterprise — digital hub for a team-wide gamified engagement program with activity tracking, prize submission, and cross-functional participation.</li>
+          <li>Designed and delivered the complete virtual experience for SDS Days — end-to-end UX in Miro, built the microsite, secured Workforce Operations provisioning, managed day-of communications.</li>
           <li>Lead the at-home engagement committee, driving strategy and execution for remote employee engagement across SDS regions.</li>
           <li>Design, develop, and maintain web content and digital engagement assets across SDS communications channels.</li>
           <li>Manage Wrike, Slack, WebEx, Box, and Quip to streamline workflows across a geographically distributed team.</li>
@@ -529,7 +529,7 @@
         <div class="job-header"><span class="job-title">Senior Compliance Investigator</span><span class="job-date">2021 – Present</span></div>
         <p class="job-company">Apple · Strategic Data Solutions — Compliance Investigations</p>
         <ul>
-          <li>Investigate possible sanctioned parties across the company and its subsidiaries using the enterprise compliance screening system — and case management system.</li>
+          <li>Investigate possible sanctioned parties across Apple Inc. and its subsidiaries using HERMES — Apple's custom screening system for financial crimes regulatory compliance — and Hermes Case Management.</li>
           <li>Apply independent judgment and analytical rigor to assess, document, and escalate potential sanctions risks spanning foreign regimes, narcotics trafficking, weapons proliferation, and human trafficking.</li>
           <li>Reviewed and analyzed purchase transactions, chargeback requests, and customer accounts to detect unauthorized activity.</li>
           <li>Designed "Hot Ones: Compliance Edition" — convened first-ever cross-market meetings across Austin, Raleigh, Elk Grove, and Singapore. Facilitated six global sessions.</li>
@@ -554,9 +554,9 @@
       <div class="resume-section-label">Skills</div>
       <div class="skills-block">
         <p class="skills-category">Apple &amp; IS&amp;T Systems</p>
-        <p class="skills-list">macOS · iOS · watchOS · tvOS · Apple hardware diagnostics &amp; repair · the enterprise compliance screening system · case management system · Enterprise SSO · Access Manager · IS&amp;T internal tools · Network infrastructure &amp; wireless technology · GitHub Enterprise (Pages) · CLI/Terminal</p>
+        <p class="skills-list">macOS · iOS · watchOS · tvOS · Apple hardware diagnostics &amp; repair · HERMES · Hermes Case Management · AppleConnect · Access Manager · IS&amp;T internal tools · Network infrastructure &amp; wireless technology · GitHub Enterprise (Pages) · CLI/Terminal</p>
         <p class="skills-category">Security &amp; Compliance</p>
-        <p class="skills-list">Sanctions investigations · National security compliance · PII data handling · Data sensitivity tiers · Risk assessment &amp; escalation · Financial crimes regulatory compliance · Enterprise SSO-protected systems</p>
+        <p class="skills-list">Sanctions investigations · National security compliance · PII data handling · Data sensitivity tiers · Risk assessment &amp; escalation · Financial crimes regulatory compliance · AppleConnect-protected systems</p>
         <p class="skills-category">Collaboration &amp; Operations</p>
         <p class="skills-list">Wrike · Slack (workflow design) · Keynote · Miro · Box · Quip · WebEx · Numbers · Cross-functional stakeholder management · Distributed team leadership · Global program coordination · Editorial content creation · Technical documentation</p>
       </div>
@@ -586,10 +586,10 @@
 
     <div style="display:flex;gap:16px;flex-wrap:wrap;">
       <!-- Graph -->
-      <div id="graph-container" style="flex:1;min-width:300px;"><svg id="graph-svg"></svg></div>
+      <div id="graph-container" style="flex:1;min-width:300px;height:700px;"><svg id="graph-svg" style="width:100%;height:700px;"></svg></div>
       <!-- Card panel — appears on skill click -->
       <div id="skill-panel" style="width:320px;display:none;flex-shrink:0;">
-        <div id="skill-panel-inner" style="background:var(--bg-alt);border-radius:var(--radius);padding:20px;height:580px;overflow-y:auto;">
+        <div id="skill-panel-inner" style="background:var(--bg-alt);border-radius:var(--radius);padding:20px;height:700px;overflow-y:auto;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
             <h3 id="skill-panel-title" style="font-size:18px;font-weight:700;color:var(--text);"></h3>
             <button onclick="closeSkillPanel()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-2);">✕</button>
@@ -699,7 +699,7 @@ function observeFadeIns() {
 }
 observeFadeIns();
 
-// ── SKILLS GRAPH — full rebuild ─────────────────────────────
+// ── SKILLS GRAPH — rebuilt to match Skills Hub aesthetic ────────
 
 const catColors = {
   infrastructure:'#FF6B35', backend:'#5856D6', frontend:'#34C759',
@@ -708,274 +708,315 @@ const catColors = {
   engagement:'#C4956A', investigations:'#5AC8FA'
 };
 
-// ── ALL NODES ──
+// ── ALL NODES — with short readable labels ──
 const nodeData = [
-  // Projects
-  {id:'hub-trilogy',    label:'Hub Trilogy',    type:'project',r:28},
-  {id:'doubles',        label:'EQX Doubles',    type:'project',r:28},
-  {id:'training-hub',   label:'Training Hub',   type:'project',r:28},
-  {id:'engagement-arc', label:'Engagement Arc', type:'project',r:28},
-  {id:'seed-your-ideas',label:'Seed Your Ideas',type:'project',r:28},
+  {id:'hub-trilogy',    label:'Hub Trilogy',      type:'project'},
+  {id:'doubles',        label:'EQX Doubles',       type:'project'},
+  {id:'training-hub',   label:'Training Hub',      type:'project'},
+  {id:'engagement-arc', label:'Engagement Arc',    type:'project'},
+  {id:'seed-your-ideas',label:'Seed Your Ideas',   type:'project'},
   // Infrastructure
-  {id:'Docker',         label:'Docker',          type:'skill',cat:'infrastructure',r:13},
-  {id:'Rio-CI-CD',      label:'Enterprise CI/CD',       type:'skill',cat:'infrastructure',r:12},
-  {id:'Apple-Shuri',    label:'Enterprise PaaS',     type:'skill',cat:'infrastructure',r:13},
-  {id:'GitHub-Actions', label:'GitHub Actions',  type:'skill',cat:'infrastructure',r:15},
-  {id:'GitHub-Pages',   label:'GitHub Pages',   type:'skill',cat:'infrastructure',r:13},
-  {id:'Railway',        label:'Railway',         type:'skill',cat:'infrastructure',r:11},
-  {id:'Formspree',      label:'Formspree',       type:'skill',cat:'infrastructure',r:10},
-  // Backend & Data
-  {id:'Python',         label:'Python',          type:'skill',cat:'backend',r:15},
-  {id:'FastAPI',        label:'FastAPI',         type:'skill',cat:'backend',r:13},
-  {id:'Pydantic',       label:'Pydantic',        type:'skill',cat:'backend',r:11},
-  {id:'Uvicorn',        label:'Uvicorn',         type:'skill',cat:'backend',r:10},
-  {id:'SQLite',         label:'SQLite',          type:'skill',cat:'backend',r:13},
-  {id:'PostgreSQL',     label:'PostgreSQL',      type:'skill',cat:'backend',r:15},
-  {id:'PLpgSQL',        label:'PLpgSQL',         type:'skill',cat:'backend',r:12},
-  {id:'Supabase',       label:'Supabase',        type:'skill',cat:'backend',r:15},
-  {id:'Flask',          label:'Flask',           type:'skill',cat:'backend',r:12},
-  {id:'Jinja2',         label:'Jinja2',          type:'skill',cat:'backend',r:11},
-  {id:'REST-API',       label:'REST API',        type:'skill',cat:'backend',r:14},
-  {id:'RLS',            label:'Row Level Sec.',  type:'skill',cat:'backend',r:11},
-  {id:'DB-Schema',      label:'DB Schema',       type:'skill',cat:'backend',r:12},
-  {id:'DB-Functions',   label:'DB Functions',    type:'skill',cat:'backend',r:12},
-  {id:'Data-Modeling',  label:'Data Modeling',   type:'skill',cat:'backend',r:11},
+  {id:'Docker',         label:'Docker',            type:'skill',cat:'infrastructure'},
+  {id:'Rio-CI-CD',      label:'Rio CI/CD',         type:'skill',cat:'infrastructure'},
+  {id:'Apple-Shuri',    label:'Apple Shuri',       type:'skill',cat:'infrastructure'},
+  {id:'GitHub-Actions', label:'GitHub Actions',    type:'skill',cat:'infrastructure'},
+  {id:'GitHub-Pages',   label:'GitHub Pages',      type:'skill',cat:'infrastructure'},
+  {id:'Railway',        label:'Railway',            type:'skill',cat:'infrastructure'},
+  {id:'Formspree',      label:'Formspree',          type:'skill',cat:'infrastructure'},
+  // Backend
+  {id:'Python',         label:'Python',             type:'skill',cat:'backend'},
+  {id:'FastAPI',        label:'FastAPI',            type:'skill',cat:'backend'},
+  {id:'Pydantic',       label:'Pydantic',           type:'skill',cat:'backend'},
+  {id:'Uvicorn',        label:'Uvicorn',            type:'skill',cat:'backend'},
+  {id:'SQLite',         label:'SQLite',             type:'skill',cat:'backend'},
+  {id:'PostgreSQL',     label:'PostgreSQL',         type:'skill',cat:'backend'},
+  {id:'PLpgSQL',        label:'PLpgSQL',            type:'skill',cat:'backend'},
+  {id:'Supabase',       label:'Supabase',           type:'skill',cat:'backend'},
+  {id:'Flask',          label:'Flask',              type:'skill',cat:'backend'},
+  {id:'Jinja2',         label:'Jinja2',             type:'skill',cat:'backend'},
+  {id:'REST-API',       label:'REST API',           type:'skill',cat:'backend'},
+  {id:'RLS',            label:'Row Level Sec',      type:'skill',cat:'backend'},
+  {id:'DB-Schema',      label:'DB Schema',          type:'skill',cat:'backend'},
+  {id:'DB-Functions',   label:'DB Functions',       type:'skill',cat:'backend'},
+  {id:'Data-Modeling',  label:'Data Modeling',      type:'skill',cat:'backend'},
   // Frontend
-  {id:'HTML',           label:'HTML',            type:'skill',cat:'frontend',r:14},
-  {id:'CSS',            label:'CSS',             type:'skill',cat:'frontend',r:14},
-  {id:'JavaScript',     label:'JavaScript',      type:'skill',cat:'frontend',r:17},
-  {id:'D3js',           label:'D3.js',           type:'skill',cat:'frontend',r:14},
-  {id:'Leaflet',        label:'Leaflet.js',      type:'skill',cat:'frontend',r:12},
-  {id:'Canvas-API',     label:'Canvas API',      type:'skill',cat:'frontend',r:12},
-  {id:'Fuse-js',        label:'Fuse.js',         type:'skill',cat:'frontend',r:11},
-  {id:'localStorage',   label:'localStorage',    type:'skill',cat:'frontend',r:11},
-  {id:'CSS-Variables',  label:'CSS Variables',   type:'skill',cat:'frontend',r:11},
-  {id:'Hash-Routing',   label:'Hash Routing',    type:'skill',cat:'frontend',r:10},
-  {id:'IntersectionObs',label:'IntersectionObs', type:'skill',cat:'frontend',r:10},
-  {id:'TopoJSON',       label:'TopoJSON',        type:'skill',cat:'frontend',r:10},
-  // Mobile & Native
-  {id:'Swift',          label:'Swift',           type:'skill',cat:'mobile',r:14},
-  {id:'SwiftUI',        label:'SwiftUI',         type:'skill',cat:'mobile',r:13},
-  {id:'Xcode',          label:'Xcode',           type:'skill',cat:'mobile',r:12},
-  {id:'async-await',    label:'async/await',     type:'skill',cat:'mobile',r:12},
-  {id:'MVVM',           label:'MVVM',            type:'skill',cat:'mobile',r:11},
-  {id:'Codable',        label:'Codable',         type:'skill',cat:'mobile',r:10},
-  // AI & Automation
-  {id:'MCP',            label:'MCP',             type:'skill',cat:'ai',r:13},
-  {id:'Enchante',       label:'Enchanté',        type:'skill',cat:'ai',r:13},
-  {id:'Slack-Workflows',label:'Slack Workflows', type:'skill',cat:'ai',r:13},
-  {id:'Quip-Automation',label:'Quip Automation', type:'skill',cat:'ai',r:12},
-  {id:'AI-Agent-Dev',   label:'AI Agent Dev',    type:'skill',cat:'ai',r:14},
-  // Algorithms & Patterns
-  {id:'Haversine',      label:'Haversine',       type:'skill',cat:'algorithms',r:11},
-  {id:'Transit-Routing',label:'Transit Routing', type:'skill',cat:'algorithms',r:11},
-  {id:'Fisher-Yates',   label:'Fisher-Yates',    type:'skill',cat:'algorithms',r:11},
-  {id:'Custom-Scoring', label:'Custom Scoring',  type:'skill',cat:'algorithms',r:12},
-  {id:'Force-Physics',  label:'Force Physics',   type:'skill',cat:'algorithms',r:12},
-  {id:'Fuzzy-Search',   label:'Fuzzy Search',    type:'skill',cat:'algorithms',r:12},
-  {id:'Geo-Profiling',  label:'Geo Profiling',   type:'skill',cat:'algorithms',r:11},
-  {id:'PDF-Ingestion',  label:'PDF Ingestion',   type:'skill',cat:'algorithms',r:10},
-  // Identity & Security
-  {id:'Enterprise SSO',   label:'Enterprise SSO',type:'skill',cat:'security',r:12},
-  {id:'DSID-Identity',  label:'DSID Identity',   type:'skill',cat:'security',r:11},
-  {id:'RBAC',           label:'RBAC',            type:'skill',cat:'security',r:11},
-  // Program & Design
-  {id:'Program-Design', label:'Program Design',  type:'skill',cat:'program',r:15},
-  {id:'Systems-Arch',   label:'Systems Arch',    type:'skill',cat:'program',r:14},
-  {id:'Tech-Writing',   label:'Technical Writing',type:'skill',cat:'program',r:13},
-  {id:'Product-Design', label:'Product Design',  type:'skill',cat:'program',r:13},
-  {id:'Curriculum',     label:'Curriculum Design',type:'skill',cat:'program',r:12},
-  {id:'Event-Planning', label:'Event Planning',  type:'skill',cat:'program',r:12},
-  {id:'Proposal-Writing',label:'Proposal Writing',type:'skill',cat:'program',r:11},
-  {id:'Engagement-Strat',label:'Engagement Strat',type:'skill',cat:'program',r:12},
-  {id:'Stakeholder-Mgmt',label:'Stakeholder Mgmt',type:'skill',cat:'program',r:12},
-  {id:'Gap-Analysis',   label:'Gap Analysis',    type:'skill',cat:'program',r:11},
-  {id:'Leadership-Handoff',label:'Leadership Handoff',type:'skill',cat:'program',r:11},
-  {id:'Onboarding-Design',label:'Onboarding Design',type:'skill',cat:'program',r:11},
-  {id:'Program-Iteration',label:'Program Iteration',type:'skill',cat:'program',r:11},
-  {id:'Comms-Design',   label:'Comms Design',    type:'skill',cat:'program',r:12},
-  {id:'Comms-Planning', label:'Comms Planning',  type:'skill',cat:'program',r:11},
-  {id:'Compliance-Content',label:'Compliance Content',type:'skill',cat:'program',r:11},
-  {id:'Tech-Proj-Mgmt', label:'Tech Project Mgmt',type:'skill',cat:'program',r:12},
-  // Engagement & Communications
-  {id:'Employee-Experience',  label:'Employee Experience',  type:'skill',cat:'engagement',r:14},
-  {id:'Internal-Comms',       label:'Internal Comms',       type:'skill',cat:'engagement',r:13},
-  {id:'Virtual-Exp-Design',   label:'Virtual Exp Design',   type:'skill',cat:'engagement',r:13},
-  {id:'Event-Production',     label:'Event Production',     type:'skill',cat:'engagement',r:13},
-  {id:'Recognition-Programs', label:'Recognition Programs', type:'skill',cat:'engagement',r:12},
-  {id:'Storytelling',         label:'Storytelling',         type:'skill',cat:'engagement',r:12},
-  {id:'Distributed-Leadership',label:'Distributed Leadership',type:'skill',cat:'engagement',r:13},
-  {id:'Cross-functional-Leadr',label:'Cross-functional Leadr',type:'skill',cat:'engagement',r:12},
-  {id:'Global-Coord',         label:'Global Coordination',  type:'skill',cat:'engagement',r:12},
-  {id:'Engagement-Metrics',   label:'Engagement Metrics',   type:'skill',cat:'engagement',r:11},
-  {id:'Sensitive-Info',       label:'Sensitive Info Handling',type:'skill',cat:'engagement',r:11},
-  // Investigations & Compliance Expertise
-  {id:'Sanctions-Analysis',   label:'Sanctions Analysis',   type:'skill',cat:'investigations',r:13},
-  {id:'PII-Data-Handling',    label:'PII Data Handling',    type:'skill',cat:'investigations',r:12},
-  {id:'the enterprise compliance screening system',               label:'the enterprise compliance screening system',               type:'skill',cat:'investigations',r:13},
-  {id:'Natl-Security-Compl',  label:'Natl Security Compl',  type:'skill',cat:'investigations',r:12},
-  {id:'Financial-Crimes-RC',  label:'Financial Crimes RC',  type:'skill',cat:'investigations',r:12},
-  {id:'Fraud-Risk-Analysis',  label:'Fraud Risk Analysis',  type:'skill',cat:'investigations',r:12},
-  // Apple Platform Expertise
-  {id:'Apple-Hardware',       label:'Apple Hardware',       type:'skill',cat:'investigations',r:12},
-  {id:'macOS-iOS-Stack',      label:'macOS / iOS Stack',    type:'skill',cat:'investigations',r:13},
-  {id:'Network-Wireless',     label:'Network & Wireless',   type:'skill',cat:'investigations',r:11},
+  {id:'HTML',           label:'HTML',               type:'skill',cat:'frontend'},
+  {id:'CSS',            label:'CSS',                type:'skill',cat:'frontend'},
+  {id:'JavaScript',     label:'JavaScript',         type:'skill',cat:'frontend'},
+  {id:'D3js',           label:'D3.js',              type:'skill',cat:'frontend'},
+  {id:'Leaflet',        label:'Leaflet.js',         type:'skill',cat:'frontend'},
+  {id:'Canvas-API',     label:'Canvas API',         type:'skill',cat:'frontend'},
+  {id:'Fuse-js',        label:'Fuse.js',            type:'skill',cat:'frontend'},
+  {id:'localStorage',   label:'localStorage',       type:'skill',cat:'frontend'},
+  {id:'CSS-Variables',  label:'CSS Variables',      type:'skill',cat:'frontend'},
+  {id:'Hash-Routing',   label:'Hash Routing',       type:'skill',cat:'frontend'},
+  {id:'IntersectionObs',label:'IntersectionObs',    type:'skill',cat:'frontend'},
+  {id:'TopoJSON',       label:'TopoJSON',           type:'skill',cat:'frontend'},
+  {id:'React',          label:'React 18',           type:'skill',cat:'frontend'},
+  {id:'Tailwind',       label:'Tailwind',           type:'skill',cat:'frontend'},
+  {id:'Framer-Motion',  label:'Framer Motion',      type:'skill',cat:'frontend'},
+  // Mobile
+  {id:'Swift',          label:'Swift',              type:'skill',cat:'mobile'},
+  {id:'SwiftUI',        label:'SwiftUI',            type:'skill',cat:'mobile'},
+  {id:'Xcode',          label:'Xcode',              type:'skill',cat:'mobile'},
+  {id:'async-await',    label:'async/await',        type:'skill',cat:'mobile'},
+  {id:'MVVM',           label:'MVVM',               type:'skill',cat:'mobile'},
+  {id:'Codable',        label:'Codable',            type:'skill',cat:'mobile'},
+  // AI
+  {id:'MCP',            label:'MCP',                type:'skill',cat:'ai'},
+  {id:'Enchante',       label:'Enchanté',           type:'skill',cat:'ai'},
+  {id:'Slack-Workflows',label:'Slack Workflows',    type:'skill',cat:'ai'},
+  {id:'Quip-Automation',label:'Quip Automation',    type:'skill',cat:'ai'},
+  {id:'AI-Agent-Dev',   label:'AI Agent Dev',       type:'skill',cat:'ai'},
+  {id:'Gemini',         label:'Gemini Flash',       type:'skill',cat:'ai'},
+  // Algorithms
+  {id:'Haversine',      label:'Haversine',          type:'skill',cat:'algorithms'},
+  {id:'Transit-Routing',label:'Transit Routing',    type:'skill',cat:'algorithms'},
+  {id:'Fisher-Yates',   label:'Fisher-Yates',       type:'skill',cat:'algorithms'},
+  {id:'Custom-Scoring', label:'Custom Scoring',     type:'skill',cat:'algorithms'},
+  {id:'Force-Physics',  label:'Force Physics',      type:'skill',cat:'algorithms'},
+  {id:'Fuzzy-Search',   label:'Fuzzy Search',       type:'skill',cat:'algorithms'},
+  {id:'Geo-Profiling',  label:'Geo Profiling',      type:'skill',cat:'algorithms'},
+  {id:'PDF-Ingestion',  label:'PDF Ingestion',      type:'skill',cat:'algorithms'},
+  // Security
+  {id:'AppleConnect',   label:'AppleConnect SSO',   type:'skill',cat:'security'},
+  {id:'DSID-Identity',  label:'DSID Identity',      type:'skill',cat:'security'},
+  {id:'RBAC',           label:'RBAC',               type:'skill',cat:'security'},
+  // Program
+  {id:'Program-Design', label:'Program Design',     type:'skill',cat:'program'},
+  {id:'Systems-Arch',   label:'Systems Arch',       type:'skill',cat:'program'},
+  {id:'Tech-Writing',   label:'Tech Writing',       type:'skill',cat:'program'},
+  {id:'Product-Design', label:'Product Design',     type:'skill',cat:'program'},
+  {id:'Curriculum',     label:'Curriculum Design',  type:'skill',cat:'program'},
+  {id:'Event-Planning', label:'Event Planning',     type:'skill',cat:'program'},
+  {id:'Proposal-Writing',label:'Proposal Writing',  type:'skill',cat:'program'},
+  {id:'Engagement-Strat',label:'Engagement Strat',  type:'skill',cat:'program'},
+  {id:'Stakeholder-Mgmt',label:'Stakeholder Mgmt',  type:'skill',cat:'program'},
+  {id:'Gap-Analysis',   label:'Gap Analysis',       type:'skill',cat:'program'},
+  {id:'Leadership-Handoff',label:'Leadership H/O',  type:'skill',cat:'program'},
+  {id:'Onboarding-Design',label:'Onboarding Design',type:'skill',cat:'program'},
+  {id:'Program-Iteration',label:'Prog Iteration',   type:'skill',cat:'program'},
+  {id:'Comms-Design',   label:'Comms Design',       type:'skill',cat:'program'},
+  {id:'Comms-Planning', label:'Comms Planning',     type:'skill',cat:'program'},
+  {id:'Compliance-Content',label:'Compliance Content',type:'skill',cat:'program'},
+  {id:'Tech-Proj-Mgmt', label:'Tech Proj Mgmt',     type:'skill',cat:'program'},
+  // Engagement
+  {id:'Employee-Experience',label:'Employee Exp',   type:'skill',cat:'engagement'},
+  {id:'Internal-Comms', label:'Internal Comms',     type:'skill',cat:'engagement'},
+  {id:'Virtual-Exp-Design',label:'Virtual Exp Design',type:'skill',cat:'engagement'},
+  {id:'Event-Production',label:'Event Production',  type:'skill',cat:'engagement'},
+  {id:'Recognition-Programs',label:'Recognition Pgms',type:'skill',cat:'engagement'},
+  {id:'Storytelling',   label:'Storytelling',       type:'skill',cat:'engagement'},
+  {id:'Distributed-Leadership',label:'Distributed Leadr',type:'skill',cat:'engagement'},
+  {id:'Cross-functional-Leadr',label:'Cross-functional',type:'skill',cat:'engagement'},
+  {id:'Global-Coord',   label:'Global Coord',       type:'skill',cat:'engagement'},
+  {id:'Engagement-Metrics',label:'Engagement Metrics',type:'skill',cat:'engagement'},
+  {id:'Sensitive-Info', label:'Sensitive Info',     type:'skill',cat:'engagement'},
+  // Investigations
+  {id:'Sanctions-Analysis',label:'Sanctions Analysis',type:'skill',cat:'investigations'},
+  {id:'PII-Data-Handling',label:'PII Handling',     type:'skill',cat:'investigations'},
+  {id:'HERMES',         label:'HERMES System',      type:'skill',cat:'investigations'},
+  {id:'Natl-Security-Compl',label:'Natl Security',  type:'skill',cat:'investigations'},
+  {id:'Financial-Crimes-RC',label:'Financial Crimes',type:'skill',cat:'investigations'},
+  {id:'Fraud-Risk-Analysis',label:'Fraud Analysis', type:'skill',cat:'investigations'},
+  {id:'Apple-Hardware', label:'Apple Hardware',     type:'skill',cat:'investigations'},
+  {id:'macOS-iOS-Stack',label:'macOS/iOS Stack',    type:'skill',cat:'investigations'},
+  {id:'Network-Wireless',label:'Network & Wireless',type:'skill',cat:'investigations'},
 ];
 
 // ── ALL LINKS ──
 const rawLinks = [
-  // Hub Trilogy
   ...['Docker','Rio-CI-CD','Apple-Shuri','GitHub-Actions','GitHub-Pages','Python','FastAPI','Pydantic',
       'Uvicorn','SQLite','PostgreSQL','Supabase','D3js','TopoJSON','REST-API','RLS','DB-Schema',
-      'Data-Modeling','Enterprise SSO','DSID-Identity','RBAC','HTML','CSS','JavaScript',
+      'Data-Modeling','AppleConnect','DSID-Identity','RBAC','HTML','CSS','JavaScript',
       'Program-Design','Systems-Arch','Product-Design','Tech-Proj-Mgmt'].map(t=>({s:'hub-trilogy',t})),
-  // EQX Doubles
   ...['Python','PostgreSQL','PLpgSQL','Supabase','GitHub-Actions','Flask','Jinja2','JavaScript',
       'HTML','CSS','Swift','SwiftUI','Xcode','async-await','MVVM','Codable','REST-API',
       'PDF-Ingestion','Haversine','Transit-Routing','Railway','DB-Functions','Geo-Profiling'].map(t=>({s:'doubles',t})),
-  // Training Hub
   ...['HTML','CSS','JavaScript','Fuse-js','D3js','Fisher-Yates','Custom-Scoring','Fuzzy-Search',
       'CSS-Variables','localStorage','Hash-Routing','IntersectionObs','GitHub-Pages','GitHub-Actions',
-      'Product-Design','Curriculum','Compliance-Content'].map(t=>({s:'training-hub',t})),
-  // Engagement Arc
+      'Product-Design','Curriculum','Compliance-Content',
+      'Sanctions-Analysis','PII-Data-Handling','HERMES','Natl-Security-Compl',
+      'Financial-Crimes-RC','Fraud-Risk-Analysis','Apple-Hardware','macOS-iOS-Stack','Network-Wireless'].map(t=>({s:'training-hub',t})),
   ...['HTML','CSS','JavaScript','Canvas-API','Leaflet','Force-Physics','Custom-Scoring','localStorage',
       'CSS-Variables','Formspree','GitHub-Pages','GitHub-Actions','Event-Planning','Program-Design',
-      'Comms-Planning','Proposal-Writing','Product-Design','Engagement-Strat','Curriculum','Fuzzy-Search'].map(t=>({s:'engagement-arc',t})),
-  // Seed Your Ideas
+      'Comms-Planning','Proposal-Writing','Product-Design','Engagement-Strat','Curriculum','Fuzzy-Search',
+      'Employee-Experience','Internal-Comms','Virtual-Exp-Design','Event-Production',
+      'Recognition-Programs','Storytelling','Distributed-Leadership','Cross-functional-Leadr',
+      'Global-Coord','Engagement-Metrics'].map(t=>({s:'engagement-arc',t})),
   ...['MCP','Enchante','Slack-Workflows','Quip-Automation','AI-Agent-Dev','Program-Design','Systems-Arch',
       'Tech-Writing','Comms-Design','Stakeholder-Mgmt','Gap-Analysis','Program-Iteration',
-      'Leadership-Handoff','Onboarding-Design','Comms-Planning','Tech-Proj-Mgmt'].map(t=>({s:'seed-your-ideas',t})),
+      'Leadership-Handoff','Onboarding-Design','Comms-Planning','Tech-Proj-Mgmt',
+      'Cross-functional-Leadr','Sensitive-Info'].map(t=>({s:'seed-your-ideas',t})),
 ];
 
-// ── SKILL → PROJECT CARDS ──
+// ── DYNAMIC RADII based on connection count ──
+(function assignRadii() {
+  const counts = {};
+  rawLinks.forEach(l => {
+    counts[l.s] = (counts[l.s]||0)+1;
+    counts[l.t] = (counts[l.t]||0)+1;
+  });
+  nodeData.forEach(n => {
+    if (n.type==='project') { n.r = 36; return; }
+    const c = counts[n.id]||1;
+    n.r = Math.max(18, Math.min(28, 14 + c * 2));
+  });
+})();
+
+// ── PROJECT CARDS DATA ──
 const skillProjectData = {
-  'Docker':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Multi-stage Dockerfile, non-root appuser (Shuri requirement + security best practice), pushed to enterprise container registry via Enterprise CI/CD'}],
-  'Rio-CI-CD':       [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'ci.yml — vessel build, Memento signing, push to enterprise container registry, deploy.yaml to Shuri. Fires on every push to main.'}],
-  'Apple-Shuri':     [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Two-region deployment (us-west-2 + us-east-1) with traffic-based autoscaling. The PaaS injects x-user-email and x-user-id headers into every authenticated request.'}],
-  'GitHub-Actions':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Deployment pipeline for Stage 1 and 2'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'PDF ingestion every 6 hours — pulls Equinox schedule PDFs, loads into Supabase'},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Auto-deploy to GitHub Enterprise Pages on push to main'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Auto-deploy for engagement sites'}],
-  'GitHub-Pages':    [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 1 (Team Intelligence Hub) and Stage 2 (m'atelier) both deployed to GitHub Pages"},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Deployed to GitHub Enterprise Pages — requires VPN'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'AHA Hangout site, Engagement Hub, Signal Summit proposal site'}],
-  'Railway':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 2 Flask server — Procfile + railway.json, one-command deploy. Environment variables via Railway dashboard.'}],
-  'Formspree':       [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'AHA Hangout event submission form — validates @company.com email, opens pre-filled mailto'}],
-  'Python':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'FastAPI app, Pydantic models, async lifespan hooks, identity resolution (DSID/email/dev fallback)'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 2 Flask server — app.py routes, supabase_client.py module, data structures as Python dicts'}],
-  'FastAPI':         [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All API routes — employees, projects, audit, standing confirm. Pydantic request/response models. Async lifespan hooks for DB init. Self-documenting at /docs.'}],
-  'Pydantic':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Automatic request validation and typed contracts on every endpoint. Catches malformed requests before they hit the DB.'}],
-  'Uvicorn':         [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'ASGI server — runs the FastAPI app inside the Docker container. Configured in the Dockerfile CMD.'}],
-  'SQLite':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'WAL mode for concurrent reads. Seeds from employee JSON on first boot. Persists across container restarts. Right-sized for 100 users with read-heavy patterns — a managed DB would have been overengineered here.'}],
-  'PostgreSQL':      [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 2 (m'atelier) — full schema: team_members, projects, project_assignments, knowledge_nodes, member_knowledge junction"},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'find_doubles() stored procedure — 8-parameter PLpgSQL function. Written in Phase 1. Ran unchanged through all three rewrites.'}],
-  'PLpgSQL':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'find_doubles() — the core algorithm. Takes club IDs, day of week, two category values, max gap, pair order constraint, and time window as minutes-since-midnight. Ran through browser, Flask server, and iOS app unchanged.'}],
-  'Supabase':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 2 backend — PostgreSQL + REST API + RLS, zero infrastructure. Validated the backend approach before production."},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'All three phases: direct client SDK in Phase 1, Python SDK in Phase 2, REST API in Phase 3.'}],
-  'Flask':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 2 — Flask server between browser and Supabase. POST /api/doubles, GET /clubs. Credentials off the client.'}],
-  'Jinja2':          [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 2 — club and category dropdowns generated server-side via {% for club in clubs %} loops. No hardcoded HTML.'}],
-  'REST-API':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'/api/employees, /api/projects, /api/audit/csv, /api/employees/{id}/standing/confirm, /api/health, /api/whoami'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 3 iOS — SupabaseService.swift calls find_doubles() via Supabase REST. All three phases use REST at some layer.'}],
-  'RLS':             [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 2 (m'atelier) — Row Level Security policies ensure users only access their own data. Template for the production auth approach."}],
-  'DB-Schema':       [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Schema designed from data collected in a team survey — the data existed before the system. team_members, projects, project_assignments, knowledge_nodes, member_knowledge junction.'}],
-  'DB-Functions':    [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'find_doubles() in PLpgSQL — matching class types, validating time windows, filtering by location, surfacing transit data. The algorithm that outlived three application rewrites.'}],
-  'Data-Modeling':   [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Survey responses became column names. Fields that appeared in responses became the schema. Deliberate decision to collect data before designing the system.'}],
-  'HTML':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All three UI layers'},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'2,700+ lines — the entire platform is a single index.html'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'All four builds: onboarding SPA, hangout site, engagement hub, summit proposal'}],
-  'CSS':             [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All three UI layers'},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'9 complete themes via CSS custom property remap per location. Light/dark persisted in localStorage.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Priority color coding, animated mesh gradient, arcade CRT aesthetic, summit site dark/light map tile swap'}],
-  'JavaScript':      [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All UI — project cards, traffic light availability, D3 force graph'},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'KB search engine, decision tree traversal, Fisher-Yates simulator, geography game'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Event questionnaire scoring algorithm (12 blueprints), raw physics engine for force graph, intake survey, localStorage data'}],
-  'D3js':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Force graph with three SVG label layers, progressive zoom reveal (>0.5 category, >1.1 full label, >3 description). Semantic + keyword-overlap connections."},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Geography game visualizations'}],
-  'Leaflet':         [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Signal Summit — 150 employee dots across 40+ cities. CartoDB tiles (dark/light synced). Custom divIcon markers with glow shadows. Population weighting across 50 real US city coordinates. Geographic bounds checking (no dots in Mexico).'}],
-  'Canvas-API':      [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Module 4 What We Love — 22 interest nodes, spring physics, drag-to-pan, scroll-to-zoom. Built without D3 — custom physics engine in raw JS. Category filters, live search, insight bar.'}],
-  'Fuse-js':         [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Knowledge base — 180ms debounce, live highlight injection. Custom scoring function (title > tag > body frequency) instead of default Fuse config.'}],
-  'localStorage':    [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Theme and dark/light mode persistence across sessions'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Onboarding checklist progress (survives page refresh), employee intake survey profile data (feeds interest graph in Module 4)'}],
-  'CSS-Variables':   [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'9 location themes — Austin, Elk Grove, San Diego, Arizona, Raleigh, Boston, New York, Singapore, Global. Each remaps the full custom property set.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Summit site dark/light toggle with CartoDB tile layer swap on the Leaflet map'}],
-  'Hash-Routing':    [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'URL hash routing for tab state — single file acts as a multi-page app without a server or router library'}],
-  'IntersectionObs': [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Scroll-triggered animations and visibility detection in the knowledge base scrollable results'}],
-  'TopoJSON':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Geographic data handling in the D3 knowledge visualization — loading and rendering topology data'}],
-  'Swift':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 3 iOS app — typed Swift structs with Codable in Models/, reactive @Published state in ViewModel, TransitHelper.swift ports haversine from JS into native Swift'}],
-  'SwiftUI':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'SearchView, ResultsView, ResultCard, ClubsView, SplashView — discrete SwiftUI components driving a reactive UI'}],
-  'Xcode':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Full iOS project structure — Models/, Services/, Views/, ViewModel/. Runs in Simulator; App Store requires Developer account.'}],
-  'async-await':     [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'SupabaseService.swift — all HTTP calls via async/await. Understanding the difference between interpreted (Python/JS) and compiled (Swift) execution was the explicit goal of Phase 3.'}],
-  'MVVM':            [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'SearchViewModel with @Published properties drives all SwiftUI views reactively — state changes automatically propagate to SearchView, ResultsView, ResultCard'}],
-  'Codable':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Club, DoubleResult, SearchParams — typed Swift structs with Codable for automatic JSON decode from Supabase REST responses'}],
-  'MCP':             [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Custom Enchanté agent connected to live Quip spreadsheet via MCP — reads Actions Taken history in real time, produces formatted email drafts on demand'}],
-  'Enchante':        [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Agent instructions, constraints, tone standards, privacy rules, and operational logic written from scratch. Any team member, any stage, one sentence prompt.'}],
-  'Slack-Workflows': [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Submission interface — name, category, idea, business impact — without leaving Slack. Auto-populates tracking spreadsheet. Leader notification on every new submission.'}],
-  'Quip-Automation': [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Quip-to-Slack integration — document edits (including Complete checkbox) auto-post to channel. Actions Taken column is the single source of truth for the AI agent.'}],
-  'AI-Agent-Dev':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Full agent design: instructions, tone standards (Apple voice), privacy rules (names never surfaced to investigators), operational logic for all four email stages'}],
-  'Haversine':       [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'buildTransitCache() — converts lat/lng distance between all 630 club pairs to walk minutes using 1.3 route-factor and 80m/min pace. Ported from JS to Swift in TransitHelper.swift.'}],
-  'Transit-Routing': [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Pre-computed on boot for 630 club pairs. Four types: same, walk (≤15 min), quick-train (shared line, <4km), extended (transfer or >4km). TIGHT badge when gap < minGap. MTA color assignments for all lines.'}],
-  'Fisher-Yates':    [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Shuffles all 40 training scenarios on every session start — ensures no two sessions see the same case order'}],
-  'Custom-Scoring':  [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'KB search: title weight > tag weight > body frequency (capped per word to prevent long docs from dominating)'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Event questionnaire: 12 blueprints scored against input — weighted by category match, format, budget, headcount, feeling goal, energy, and context'}],
-  'Force-Physics':   [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'What We Love interest graph — custom spring physics engine in raw JavaScript. No D3. 22 nodes, spring connections, drag-to-pan, scroll-to-zoom, hover tooltips.'}],
-  'Fuzzy-Search':    [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Knowledge base live search with 180ms debounce and highlight injection'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Live name search in the What We Love interest graph'}],
-  'Geo-Profiling':   [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:"pickTop3() boot algorithm — morning pairs matched to downtown/Brooklyn, afternoon to midtown, evening to uptown. Reflects real NYC workout geography rather than just earliest/fastest."}],
-  'PDF-Ingestion':   [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout scheduling tool.',where:'Phase 1 — ingest.js pulls Equinox schedule PDFs via GitHub Actions every 6 hours. Parses PDFs into PostgreSQL via Supabase.'}],
-  'Enterprise SSO':    [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'The PaaS injects x-user-email and x-user-id (DSID) headers on every authenticated request. Confirmed by building a debug endpoint and dumping live headers in production.'}],
-  'DSID-Identity':   [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Identity resolution chain: check DSID first (immutable), fall back to email, fall back to DEV_USER_EMAIL for local dev. DSID is more reliable than email for identity.'}],
-  'RBAC':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'API access tiers: Public (health), Self (profile), All authenticated (projects, audit), Admin or Project Lead (standing confirm), Admin only (audit/csv, employee CRUD)'}],
-  'Program-Design':  [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Two-phase program: intake pipeline + feedback loop redesign. Zero added workload constraint drove every structural decision.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Each of four builds solved a gap and created the conditions for the next one'}],
-  'Systems-Arch':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Trigger mapping: every automated touchpoint maps to an action the leader was already taking. No new behaviors required.'},{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Interface first → backend second → infrastructure last. Three builds, each with a specific job.'}],
-  'Tech-Writing':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Leader program overview, investigator guide, full email journey reference, setup guide, Enchanté getting started guide, leadership elevator pitch, investigator Slack blast — 7 documents.'}],
-  'Product-Design':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'UI patterns worked out in Stage 1 before any backend existed — traffic light availability, skills search, project cards.'},{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Every detail deliberate: rotating slideshow prompts discovery, wrong-answer feedback is most educational, 9 themes signal team ownership.'}],
-  'Curriculum':      [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'40 scenarios drawn directly from procedure documents. Three difficulty levels with distinct case types. Wrong-answer-first pedagogy: every incorrect answer shows full reasoning before advancing.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Onboarding checklist ordered by priority tier (High/Medium/Low/Additional) with weekly progression guide'}],
-  'Event-Planning':  [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'AHA Hangout — fully planned and executed virtual event. Five game categories, three prize tracks, @company.com email validation, pre-filled mailto submission. Event ran. Success.'}],
-  'Proposal-Writing':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Signal Summit — fully designed, fully documented proposal for a 4-day virtual summit. 17-question leader FAQ answered honestly. Budget case: $15K vs $100K+ in-person equivalent.'}],
-  'Engagement-Strat':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Signal Summit addresses six documented gaps: visibility, access, connection, recognition, growth, belonging. Six leader participation tiers. Hourly employee protection framework.'}],
-  'Stakeholder-Mgmt':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Presented Phase 2 redesign to program leader as a proposal. Built cross-functional case using existing program data (43+ submissions, over half actioned).'}],
-  'Gap-Analysis':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Identified through quarterly presentation monitoring: investigators submitting but never hearing back. Traced structural cause and designed a fix with zero added workload.'}],
-  'Leadership-Handoff':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Program designed to be fully operable by any team member. Documentation lets anyone run it end-to-end without a briefing.'}],
-  'Onboarding-Design':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Enchanté setup guide + general getting started guide — designed for any Apple leader new to GenAI tools.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'EEC rotation training site — 14 tool cards, priority tiers, animated progress bar, localStorage persistence'}],
-  'Program-Iteration':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Phase 1 shipped, gap identified through real usage, Phase 2 designed and presented as proposal, shipped without disrupting the running program.'}],
-  'Comms-Design':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Four email templates in the correct organizational voice — Stage 1 (confirmation), Stage 2 (active review), Stage 3A (implemented with dated timeline), Stage 3B (tabled with actionable next step).'}],
-  'Comms-Planning':  [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Full email journey reference with trigger annotations for leadership training'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Summit communications framework: pre-clearance timing, session tagging system (🟢🟡🔵🟣), Week +3 follow-through identified as most important communication in the program'}],
-  'Compliance-Content':[{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'All four procedure documents summarized. 40+ glossary terms. Decision matrix built from CR0007. 40 training scenarios drawn from real case patterns. Geography questions calibrated to compliance gaps.'}],
-  'Employee-Experience': [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'AHA Hangout event + Signal Summit: programming designed for 150+ distributed employees with no dedicated programming or leadership access'}],
-  'Internal-Comms':    [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'an org-wide event virtual experience UX, microsite, day-of communications across all sites. Editorial calendar management in Wrike.'}],
-  'Virtual-Exp-Design':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'an org-wide event end-to-end UX design in Miro — live poster showcase, learning sessions, pre-recorded content from previous in-person events. Event guide site with retro arcade aesthetic.'}],
-  'Event-Production':  [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'AHA Hangout: fully planned and executed virtual event — five game categories, three prize tracks, cross-functional participation. Also led at-home engagement committee.'}],
-  'Recognition-Programs':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Signal Summit recognition framework — AHA Showcase with peer and self-submissions, leader callouts, Wrapped as permanent recognition document'}],
-  'Storytelling':      [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Polished copy for internal campaigns across Slack, email, WebEx — translating complex initiatives into clear narratives for a global investigator audience'}],
-  'Distributed-Leadership':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Lead twice-weekly national team engagement meetings across four global campus locations. Led at-home engagement committee across SDS regions.'}],
-  'Cross-functional-Leadr':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Partnered across the broader operations team. Presented program progression to senior leadership. Built case for Phase 2 using collected program data.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Stakeholders at every level — coordinating logistics, communications, and deliverables across a multi-region globally distributed organization'}],
-  'Global-Coord':      [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Supported Compliance expansion into Singapore — designed and facilitated high-impact onboarding and team-building for the inaugural APAC cohort. Convened first-ever cross-market meetings across Austin, Raleigh, Elk Grove, and Singapore.'}],
-  'Engagement-Metrics':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds across one rotation.',where:'Module 3 Join the Team: preference collection, work arrangement, interest data that feeds the force-directed interest graph. Insight bar showing top interests ranked by frequency.'}],
-  'Sensitive-Info':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'AI agent privacy rules: team member names never surfaced to investigators. Internal notes column explicitly excluded from all automated outputs.'}],
-  'Sanctions-Analysis':[{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'40 training scenarios across three difficulty levels drawn from real sanctions screening procedure documents — With PII, Without PII, Companies, Batch Free Developer case types'}],
-  'PII-Data-Handling': [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Decision matrix handles PII/non-PII branching, expired PII scenarios, DOB matching, YOB shortcuts across all four case types'}],
-  'the enterprise compliance screening system':            [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Platform built for daily users of the enterprise compliance screening system. Content authored by the enterprise compliance screening system practitioner.'}],
-  'Natl-Security-Compl':[{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Sanctions screening content covers narcotics trafficking, weapons proliferation, human trafficking, foreign regime connections — all real compliance work contexts'}],
-  'Financial-Crimes-RC':[{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Content sourced from official procedure documents (CR0007) and four client procedure docs covering AMP, WWDR, IdMS compliance requirements'}],
-  'Fraud-Risk-Analysis':[{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Fraud scenarios in training: chargeback analysis, account review, unauthorized activity detection — built by someone who does this daily'}],
-  'Apple-Hardware':    [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'8 years as Technical Expert, Genius Bar — CT, LA, NYC. iPhone, Mac, iPad, Apple Watch, Apple TV. NSO support for Irvine, technology readiness for Century City remodel.'}],
-  'macOS-iOS-Stack':   [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Deep technical fluency: macOS, iOS, watchOS, tvOS — hardware diagnostics, wireless connectivity, network troubleshooting, device-level diagnostics across three US markets'}],
-  'Network-Wireless':  [{id:'training-hub',name:'Training Hub',summary:'Single-file compliance training platform.',where:'Network infrastructure and wireless technology — carrier/vendor coordination, store connectivity, hardware escalation resolution across high-volume customer-facing environments'}],
-  'Tech-Proj-Mgmt':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Three-stage project management: learning build → backend POC → production. Each stage had a specific job. Design decisions documented and tested before infrastructure commitments.'},{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation layer.',where:'Dual-phase delivery: intake pipeline shipped first, feedback loop redesign proposed after evaluation data collected.'}],
+  'Docker':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Multi-stage Dockerfile, non-root appuser, pushed to enterprise container registry via CI/CD'}],
+  'Rio-CI-CD':       [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'ci.yml — vessel build, Memento signing, push to container registry, deploy via deploy.yaml. Fires on every push to main.'}],
+  'Apple-Shuri':     [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Two-region deployment (us-west-2 + us-east-1) with traffic-based autoscaling. PaaS injects identity headers on every request.'}],
+  'GitHub-Actions':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Deployment pipeline'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'PDF ingestion every 6 hours'},{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Auto-deploy to GitHub Enterprise Pages'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Auto-deploy for all engagement sites'}],
+  'GitHub-Pages':    [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 1 & Stage 2 (m'atelier) deployed to GitHub Pages"},{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Apple GitHub Enterprise Pages — VPN required'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Hangout site, Engagement Hub, Summit proposal'}],
+  'Railway':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 2 Flask server — Procfile + railway.json, one-command deploy'}],
+  'Formspree':       [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'AHA Hangout event submission — validates @apple.com email, opens pre-filled mailto'}],
+  'Python':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'FastAPI app, Pydantic models, async lifespan hooks, identity resolution chain'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 2 Flask server, Supabase Python SDK, app.py routes'}],
+  'FastAPI':         [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All API routes — /api/employees, /api/projects, /api/audit/csv. Pydantic validation, async lifespan hooks, self-documenting at /docs.'}],
+  'Pydantic':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Automatic request validation and typed contracts on every endpoint'}],
+  'Uvicorn':         [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'ASGI server running FastAPI inside the Docker container'}],
+  'SQLite':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'WAL mode for concurrent reads. Seeds from JSON on first boot. Right-sized for 100 users — managed DB would have been overengineered.'}],
+  'PostgreSQL':      [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Full schema: team_members, projects, project_assignments, knowledge_nodes, member_knowledge junction"},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'find_doubles() stored procedure — the core algorithm across all three rewrites'}],
+  'PLpgSQL':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'find_doubles() — 8-parameter stored procedure. Written in Phase 1. Ran unchanged through browser, Flask server, and iOS app.'}],
+  'Supabase':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 2 backend — PostgreSQL + REST API + RLS, zero infrastructure"},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'All three phases: client SDK → Python SDK → REST API'}],
+  'Flask':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 2 — POST /api/doubles, GET /clubs. Credentials off the client.'}],
+  'Jinja2':          [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Server-side rendering — club and category dropdowns via {% for %} loops'}],
+  'REST-API':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'/api/employees, /api/projects, /api/audit/csv, standing confirm'},{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 3 iOS calls find_doubles() via Supabase REST'}],
+  'RLS':             [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Stage 2 — Row Level Security in Supabase"}],
+  'DB-Schema':       [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Schema derived from survey responses — data existed before the system'}],
+  'DB-Functions':    [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'find_doubles() in PLpgSQL — the algorithm that outlived three rewrites'}],
+  'Data-Modeling':   [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Survey responses became column names — deliberate data-first approach'}],
+  'HTML':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'All three UI layers'},{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'2,700+ lines — entire platform is a single index.html'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'All four builds: onboarding SPA, hangout, hub, summit'}],
+  'CSS':             [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'9 location themes via CSS custom property remap'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Priority color coding, arcade aesthetic, summit dark/light'}],
+  'JavaScript':      [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'KB search engine, decision trees, Fisher-Yates simulator, geography game'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Event questionnaire scoring, custom physics engine, intake survey'}],
+  'D3js':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:"Force graph with three SVG label layers, progressive zoom reveal (>0.5, >1.1, >3)"},{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Geography game visualizations'}],
+  'Leaflet':         [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Signal Summit — 150 employee dots, CartoDB tiles, custom divIcon markers, geographic bounds checking'}],
+  'Canvas-API':      [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'What We Love — 22 nodes, spring physics, no D3, raw JS physics engine'}],
+  'Fuse-js':         [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'KB search — custom scoring (title > tag > body frequency), 180ms debounce, highlight injection'}],
+  'localStorage':    [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Theme and mode persistence'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Checklist progress persistence, intake survey profile data'}],
+  'CSS-Variables':   [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'9 location themes — Austin through Singapore, each remapping the full property set'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Summit dark/light toggle with CartoDB map tile swap'}],
+  'Hash-Routing':    [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'URL hash routing — single file acts as multi-page app without a server'}],
+  'IntersectionObs': [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Scroll-triggered animations in the knowledge base'}],
+  'TopoJSON':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Geographic data handling in the D3 knowledge visualization'}],
+  'React':           [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Public portfolio version'}],
+  'Tailwind':        [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'CSS utility framework with CSS variable theming'}],
+  'Framer-Motion':   [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Page transitions and entrance animations'}],
+  'Swift':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 3 iOS — Codable structs, @Published reactive state, TransitHelper.swift'}],
+  'SwiftUI':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'SearchView, ResultsView, ResultCard, ClubsView, SplashView'}],
+  'Xcode':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Full iOS project: Models/, Services/, Views/, ViewModel/'}],
+  'async-await':     [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'SupabaseService.swift — all HTTP via async/await. Compiled vs interpreted was the explicit learning goal.'}],
+  'MVVM':            [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'SearchViewModel with @Published drives all SwiftUI views reactively'}],
+  'Codable':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Club, DoubleResult, SearchParams — typed structs with automatic JSON decode'}],
+  'MCP':             [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Custom Enchanté agent connected to live Quip spreadsheet via MCP'}],
+  'Enchante':        [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Agent instructions, constraints, tone standards, privacy rules written from scratch'}],
+  'Slack-Workflows': [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Submission interface — name, category, idea, impact — without leaving Slack. Auto-populates spreadsheet.'}],
+  'Quip-Automation': [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Quip-to-Slack integration — edits auto-post to channel. Actions Taken is the single source of truth.'}],
+  'AI-Agent-Dev':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Full agent design: instructions, tone standards (Apple voice), privacy rules, operational logic for all four email stages'}],
+  'Gemini':          [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Ritualware Oracle and Glow Up scorecard generation'}],
+  'Haversine':       [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'buildTransitCache() — 630 club pairs, 1.3 route-factor, 80m/min. Ported JS→Swift in TransitHelper.swift.'}],
+  'Transit-Routing': [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'630 pair pre-computation: same, walk, quick-train, extended. TIGHT badge when gap < minGap.'}],
+  'Fisher-Yates':    [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Shuffles 40 training scenarios every session — no two sessions identical'}],
+  'Custom-Scoring':  [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'KB: title > tag > body frequency (capped per word)'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Event questionnaire: 12 blueprints scored by category/format/budget/headcount/energy/context'}],
+  'Force-Physics':   [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'What We Love interest graph — custom spring physics in raw JS. No D3.'}],
+  'Fuzzy-Search':    [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Knowledge base live search with highlight injection'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Live name search in the interest graph'}],
+  'Geo-Profiling':   [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'pickTop3() — morning→downtown/Brooklyn, afternoon→midtown, evening→uptown. Real NYC geography.'}],
+  'PDF-Ingestion':   [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'GitHub Actions pulls Equinox schedule PDFs every 6 hours, parses into PostgreSQL'}],
+  'AppleConnect':    [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Shuri-injected authentication. Confirmed by building a debug endpoint and dumping live headers in production.'}],
+  'DSID-Identity':   [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Identity chain: DSID first (immutable), email fallback, DEV_USER_EMAIL for local dev'}],
+  'RBAC':            [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'API tiers: Public, Self, All authenticated, Admin/Lead, Admin only'}],
+  'Program-Design':  [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Two-phase delivery, zero added workload constraint drove every decision'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Each of four builds solved a gap and created the conditions for the next'}],
+  'Systems-Arch':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Trigger mapping: every automated touchpoint maps to something leaders already do'},{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Interface first → backend second → infrastructure last across all three stages'}],
+  'Tech-Writing':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'7 documents: leader overview, investigator guide, email journey, setup guides, pitch, Slack blast'}],
+  'Product-Design':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'UI patterns validated before any backend existed — traffic lights, skills search, project cards'},{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Every detail deliberate: rotating search prompts, wrong-answer pedagogy, 9 team themes'}],
+  'Curriculum':      [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'40 scenarios from procedure docs, 3 difficulty levels, wrong-answer-first pedagogy'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Onboarding checklist with priority tiers (High/Medium/Low/Additional) and weekly guide'}],
+  'Event-Planning':  [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'AHA Hangout: fully planned and executed virtual event, five game categories, three prize tracks'}],
+  'Proposal-Writing':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Signal Summit: 4-day format, 17-question leader FAQ, hourly employee protection, $15K vs $100K+ case'}],
+  'Engagement-Strat':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Six documented gaps: visibility, access, connection, recognition, growth, belonging. Six leader tiers.'}],
+  'Stakeholder-Mgmt':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Built cross-functional case using program data. Presented Phase 2 to program leader as proposal.'}],
+  'Gap-Analysis':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Identified through quarterly presentation monitoring: investigators submitting but never hearing back'}],
+  'Leadership-Handoff':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Program designed to run without its builder — any team member can run it end-to-end'}],
+  'Onboarding-Design':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Enchanté setup guides for new AI users'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'EEC rotation training site with priority tiers and weekly progression'}],
+  'Program-Iteration':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Phase 1 shipped, gap identified through real usage, Phase 2 proposed and shipped without disrupting the program'}],
+  'Comms-Design':    [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Four email templates for four idea states, organizational voice standards throughout'}],
+  'Comms-Planning':  [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Summit: manager pre-clearance, session tagging (🟢🟡🔵🟣), Week +3 follow-through as most important communication'},{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Full email journey reference with trigger annotations'}],
+  'Compliance-Content':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'All four procedure docs summarized, 40+ glossary terms, CR0007 decision matrix, 40 scenarios from real case patterns'}],
+  'Tech-Proj-Mgmt':  [{id:'hub-trilogy',name:'Hub Trilogy',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Three-stage project management: learning build → backend POC → production'},{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Dual-phase delivery with evaluation checkpoint between phases'}],
+  'Employee-Experience':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'AHA Hangout + Signal Summit: programming for 150+ distributed employees with no dedicated programming'}],
+  'Internal-Comms':  [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'SDS Days UX, microsite, day-of communications across all sites. Editorial calendar management in Wrike.'}],
+  'Virtual-Exp-Design':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'SDS Days end-to-end UX in Miro — live poster showcase, learning sessions, pre-recorded content'}],
+  'Event-Production':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'AHA Hangout: fully planned and executed virtual event, five game categories, three prize tracks'}],
+  'Recognition-Programs':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Signal Summit: AHA Showcase with peer/self-submissions, leader callouts, Wrapped as permanent record'}],
+  'Storytelling':    [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Polished copy for internal campaigns across Slack, email, WebEx — global investigator audience'}],
+  'Distributed-Leadership':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Lead twice-weekly national meetings across four global campus locations. Led at-home engagement committee.'}],
+  'Cross-functional-Leadr':[{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'Partnered across SDS Operations. Presented to senior leadership. Built cross-functional case.'},{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Stakeholders at every level across a multi-region globally distributed organization'}],
+  'Global-Coord':    [{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Compliance expansion into Singapore — onboarding and team-building for inaugural APAC cohort. First-ever cross-market meetings across Austin, Raleigh, Elk Grove, Singapore.'}],
+  'Engagement-Metrics':[{id:'engagement-arc',name:'Engagement Arc',summary:'Four compounding builds.',where:'Module 3 intake: preference collection, interest data, insight bar showing top interests ranked by frequency'}],
+  'Sensitive-Info':  [{id:'seed-your-ideas',name:'Seed Your Ideas',summary:'Idea submission program with full AI automation.',where:'AI agent privacy rules: team member names never surfaced to investigators. Internal notes excluded from outputs.'}],
+  'Sanctions-Analysis':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'40 scenarios drawn from real sanctions screening docs — With PII, Without PII, Companies, Batch Free Developer'}],
+  'PII-Data-Handling':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Decision matrix handles PII/non-PII branching, expired PII, DOB matching, YOB shortcuts'}],
+  'HERMES':          [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Platform built for daily users of HERMES — content authored by HERMES practitioner'}],
+  'Natl-Security-Compl':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Sanctions content: narcotics trafficking, weapons proliferation, human trafficking, foreign regimes'}],
+  'Financial-Crimes-RC':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Content from procedure docs covering AMP, WWDR, IdMS compliance requirements'}],
+  'Fraud-Risk-Analysis':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Fraud scenarios: chargeback analysis, account review, unauthorized activity detection — built by a practitioner'}],
+  'Apple-Hardware':  [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'8 years Technical Expert, Genius Bar — CT, LA, NYC. iPhone, Mac, iPad, Apple Watch, Apple TV. NSO Irvine, Century City remodel.'}],
+  'macOS-iOS-Stack': [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Deep fluency: macOS, iOS, watchOS, tvOS — hardware diagnostics, wireless, network troubleshooting across three US markets'}],
+  'Network-Wireless':[{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Network infrastructure and wireless — carrier/vendor coordination, store connectivity, hardware escalation'}],
 };
 
 const projectSummaries = {
-  'hub-trilogy':     {name:'Hub Trilogy',    summary:'Team intelligence system — learning build to 100-person enterprise production deployment.',    color:'#0071e3'},
-  'doubles':         {name:'EQX Doubles',    summary:'Workout scheduling tool rebuilt three times: browser SPA, Python server, native iOS.',     color:'#5856D6'},
-  'training-hub':    {name:'Training Hub',   summary:'Four tools in a single HTML file: knowledge base, decision matrix, simulator, geo game.', color:'#FF6B35'},
-  'engagement-arc':  {name:'Engagement Arc', summary:'Four compounding builds: event, planning hub with force graph, and summit proposal.',       color:'#FF9F0A'},
-  'seed-your-ideas': {name:'Seed Your Ideas',summary:'Idea submission program with Slack/Quip automation and a custom AI agent.',               color:'#FF375F'},
+  'hub-trilogy':     {name:'Hub Trilogy',    color:'#0071e3'},
+  'doubles':         {name:'EQX Doubles',    color:'#5856D6'},
+  'training-hub':    {name:'Training Hub',   color:'#FF6B35'},
+  'engagement-arc':  {name:'Engagement Arc', color:'#FF9F0A'},
+  'seed-your-ideas': {name:'Seed Your Ideas',color:'#FF375F'},
 };
 
-let graphInited=false, simulation, nodeEl, linkEl, labelEl, allNodes, allLinks;
+let graphInited=false, simulation, nodeEl, linkEl, labelEl, allNodes, allLinks, gRef, svgRef, zoomBehavior;
 
 function initGraph() {
   if(graphInited) return;
   graphInited=true;
+
   const container=document.getElementById('graph-container');
-  const W=container.clientWidth||620, H=580;
-  const svg=d3.select('#graph-svg').attr('viewBox',[0,0,W,H]);
-  const g=svg.append('g');
-  svg.call(d3.zoom().scaleExtent([0.2,4]).on('zoom',e=>g.attr('transform',e.transform)));
+  const W=container.clientWidth||740, H=700;
+  const svg=d3.select('#graph-svg').attr('viewBox',[0,0,W,H]).attr('height',H);
+  svgRef=svg;
+
+  zoomBehavior=d3.zoom().scaleExtent([0.15,4]).on('zoom',e=>gRef.attr('transform',e.transform));
+  svg.call(zoomBehavior);
+
+  gRef=svg.append('g');
+
   allNodes=nodeData.map(d=>({...d}));
   const byId=Object.fromEntries(allNodes.map(d=>[d.id,d]));
-  allLinks=rawLinks.map(d=>({source:byId[d.s],target:byId[d.t]}));
+  allLinks=rawLinks.filter(l=>byId[l.s]&&byId[l.t]).map(l=>({source:byId[l.s],target:byId[l.t]}));
+
   simulation=d3.forceSimulation(allNodes)
-    .force('link',d3.forceLink(allLinks).id(d=>d.id).distance(80))
-    .force('charge',d3.forceManyBody().strength(-200))
-    .force('center',d3.forceCenter(W/2,H/2))
-    .force('collide',d3.forceCollide(d=>d.r+3));
-  linkEl=g.append('g').selectAll('line').data(allLinks).join('line')
-    .attr('stroke','#d2d2d7').attr('stroke-opacity',0.4).attr('stroke-width',0.8);
-  nodeEl=g.append('g').selectAll('circle').data(allNodes).join('circle')
-    .attr('r',d=>d.r)
-    .attr('fill',d=>catColors[d.type==='skill'?d.cat:d.type]||'#999')
-    .attr('stroke','white').attr('stroke-width',1.5).style('cursor','pointer')
+    .force('link', d3.forceLink(allLinks).id(d=>d.id).distance(d => {
+      const isProject = d.source.type==='project'||d.target.type==='project';
+      return isProject ? 120 : 90;
+    }).strength(0.4))
+    .force('charge', d3.forceManyBody().strength(d => d.type==='project' ? -800 : -350).distanceMax(400))
+    .force('center', d3.forceCenter(W/2, H/2))
+    .force('collide', d3.forceCollide(d => d.r + 18).iterations(3))
+    .alphaDecay(0.022);
+
+  linkEl=gRef.append('g').attr('class','links').selectAll('line').data(allLinks).join('line')
+    .attr('stroke', d => {
+      const pNode = d.source.type==='project' ? d.source : d.target;
+      return catColors[pNode.type==='project' ? pNode.id.replace(/-/g,'').substring(0,5) : pNode.cat] || '#ccc';
+    })
+    .attr('stroke-opacity', 0.25)
+    .attr('stroke-width', 1.2);
+
+  nodeEl=gRef.append('g').attr('class','nodes').selectAll('circle').data(allNodes).join('circle')
+    .attr('r', d=>d.r)
+    .attr('fill', d => catColors[d.type==='skill' ? d.cat : d.type] || '#999')
+    .attr('stroke', 'white')
+    .attr('stroke-width', d => d.type==='project' ? 3 : 1.5)
+    .style('cursor','pointer')
     .call(d3.drag()
       .on('start',(e,d)=>{if(!e.active)simulation.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
       .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
@@ -986,23 +1027,55 @@ function initGraph() {
       else {
         const con=new Set([d.id]);
         allLinks.forEach(l=>{if(l.source.id===d.id)con.add(l.target.id);if(l.target.id===d.id)con.add(l.source.id);});
-        nodeEl.attr('opacity',n=>con.has(n.id)?1:0.08);
-        linkEl.attr('opacity',l=>con.has(l.source.id)&&con.has(l.target.id)?0.8:0.03);
-        labelEl.attr('opacity',n=>con.has(n.id)?1:0.08);
+        nodeEl.attr('opacity',n=>con.has(n.id)?1:0.07);
+        linkEl.attr('opacity',l=>con.has(l.source.id)&&con.has(l.target.id)?0.7:0.03);
+        labelEl.attr('opacity',n=>con.has(n.id)?1:0.07);
         document.getElementById('skill-panel').style.display='none';
       }
     });
-  svg.on('click',()=>{nodeEl.attr('opacity',1);linkEl.attr('opacity',0.4);labelEl.attr('opacity',1);document.getElementById('skill-panel').style.display='none';});
-  labelEl=g.append('g').selectAll('text').data(allNodes).join('text')
-    .text(d=>d.label).attr('text-anchor','middle').attr('dy','0.35em')
-    .attr('font-size',d=>d.type==='skill'?7:9)
-    .attr('font-family','-apple-system,BlinkMacSystemFont,sans-serif')
-    .attr('font-weight',d=>d.type==='project'?700:400)
-    .attr('fill','white').attr('pointer-events','none');
+
+  svg.on('click',()=>{
+    nodeEl.attr('opacity',1);
+    linkEl.attr('stroke-opacity',0.25);
+    labelEl.attr('opacity',1);
+    document.getElementById('skill-panel').style.display='none';
+  });
+
+  // Labels BELOW nodes — fully readable, not inside
+  labelEl=gRef.append('g').attr('class','labels').selectAll('text').data(allNodes).join('text')
+    .text(d=>d.label)
+    .attr('text-anchor','middle')
+    .attr('font-family','-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif')
+    .attr('font-size', d=>d.type==='project' ? 13 : 10)
+    .attr('font-weight', d=>d.type==='project' ? 700 : 500)
+    .attr('fill', 'var(--text)')
+    .attr('pointer-events','none')
+    .style('text-shadow', '0 1px 3px rgba(255,255,255,0.8), 0 -1px 3px rgba(255,255,255,0.8), 1px 0 3px rgba(255,255,255,0.8), -1px 0 3px rgba(255,255,255,0.8)');
+
   simulation.on('tick',()=>{
-    linkEl.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    linkEl
+      .attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
+      .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
     nodeEl.attr('cx',d=>d.x).attr('cy',d=>d.y);
-    labelEl.attr('x',d=>d.x).attr('y',d=>d.y);
+    labelEl
+      .attr('x',d=>d.x)
+      .attr('y',d=>d.y + d.r + 13); // BELOW the node circle
+  });
+
+  // Auto-fit after simulation settles
+  simulation.on('end', () => {
+    const nodes = allNodes;
+    const xs = nodes.map(n=>n.x), ys = nodes.map(n=>n.y);
+    const x0=Math.min(...xs)-40, y0=Math.min(...ys)-40;
+    const x1=Math.max(...xs)+40, y1=Math.max(...ys)+40;
+    const bw=x1-x0, bh=y1-y0;
+    const scale = Math.min(0.85, Math.min(W/bw, H/bh) * 0.85);
+    const tx = W/2 - scale*(x0+bw/2);
+    const ty = H/2 - scale*(y0+bh/2);
+    svg.transition().duration(800).call(
+      zoomBehavior.transform,
+      d3.zoomIdentity.translate(tx,ty).scale(scale)
+    );
   });
 }
 
@@ -1027,23 +1100,29 @@ function showSkillPanel(node) {
       <button onclick="switchTab('cases',null)" style="font-size:11px;color:${c};background:none;border:none;cursor:pointer;padding:0;font-family:var(--font)">View case study →</button>
     </div>`;
   }).join('');
+
   const con=new Set([node.id]);
   allLinks.forEach(l=>{if(l.source.id===node.id)con.add(l.target.id);if(l.target.id===node.id)con.add(l.source.id);});
   nodeEl.attr('opacity',n=>con.has(n.id)?1:0.06);
-  linkEl.attr('opacity',l=>con.has(l.source.id)&&con.has(l.target.id)?0.8:0.03);
+  linkEl.attr('stroke-opacity',l=>con.has(l.source.id)&&con.has(l.target.id)?0.6:0.03);
   labelEl.attr('opacity',n=>con.has(n.id)?1:0.06);
 }
 
-function closeSkillPanel(){document.getElementById('skill-panel').style.display='none';nodeEl.attr('opacity',1);linkEl.attr('opacity',0.4);labelEl.attr('opacity',1);}
+function closeSkillPanel(){
+  document.getElementById('skill-panel').style.display='none';
+  nodeEl.attr('opacity',1);
+  linkEl.attr('stroke-opacity',0.25);
+  labelEl.attr('opacity',1);
+}
 
 function filterGraph(cat,btn){
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   if(!graphInited)return;
-  if(cat==='all'){nodeEl.attr('opacity',1);linkEl.attr('opacity',0.4);labelEl.attr('opacity',1);}
+  if(cat==='all'){nodeEl.attr('opacity',1);linkEl.attr('stroke-opacity',0.25);labelEl.attr('opacity',1);}
   else{
     nodeEl.attr('opacity',d=>d.type==='project'||d.cat===cat?1:0.06);
-    linkEl.attr('opacity',l=>{const s=l.source.cat||l.source.type,t=l.target.cat||l.target.type;return s===cat||t===cat?0.6:0.03;});
+    linkEl.attr('stroke-opacity',l=>{const s=l.source.cat||l.source.type,t=l.target.cat||l.target.type;return s===cat||t===cat?0.5:0.02;});
     labelEl.attr('opacity',d=>d.type==='project'||d.cat===cat?1:0.06);
   }
   document.getElementById('skill-panel').style.display='none';
