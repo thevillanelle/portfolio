@@ -81,6 +81,7 @@
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid rgba(0,0,0,0.08);
   }
+  :root.dark nav { background: rgba(0,0,0,0.85); border-bottom-color: rgba(255,255,255,0.08); }
   .nav-logo { font-weight: 600; font-size: 15px; color: var(--text); }
   .nav-tabs { display: flex; gap: 4px; }
   .nav-tab {
@@ -1135,7 +1136,7 @@ function launchConfetti() {
   document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  const pieces = Array.from({length:150}, () => ({
+  const pieces = Array.from({length:250}, () => ({
     x: Math.random() * canvas.width, y: Math.random() * canvas.height - canvas.height,
     r: Math.random() * 8 + 4,
     d: Math.random() * 150,
@@ -1161,7 +1162,7 @@ function launchConfetti() {
     frame = requestAnimationFrame(draw);
   }
   draw();
-  setTimeout(() => { cancelAnimationFrame(frame); canvas.remove(); }, 3500);
+  setTimeout(() => { cancelAnimationFrame(frame); canvas.remove(); }, 8000);
 }
 
 </script>
