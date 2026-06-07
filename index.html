@@ -277,12 +277,12 @@
     <h1 class="hero fade-in">The Work.</h1>
     <div class="shimmer-bar fade-in"></div>
     <p class="subhead fade-in">Programs, platforms, and tools built from concept to production.</p>
-    <p class="body-text fade-in" style="max-width:560px;color:var(--text-2);">Seven complete projects spanning compliance tooling, enterprise infrastructure, iOS development, and engagement systems.</p>
+    <p class="body-text fade-in" style="max-width:560px;color:var(--text-2);">Seven complete projects spanning compliance tooling, enterprise infrastructure, iOS development, engagement systems, and a five-app personal software platform.</p>
     <div class="card-grid">
       <div class="card nav-card" onclick="switchTab('cases',null)">
         <div class="nav-card-icon">📋</div>
         <h3>Case Studies</h3>
-        <p>Seven complete projects with full technical depth.</p>
+        <p>Eight complete projects with full technical depth.</p>
         <span class="link">View →</span>
       </div>
       <div class="card nav-card" onclick="switchTab('resumes',null)">
@@ -780,6 +780,7 @@ const nodeData = [
   {id:'GitHub-Actions', label:'GitHub Actions',    type:'skill',cat:'infrastructure'},
   {id:'GitHub-Pages',   label:'GitHub Pages',      type:'skill',cat:'infrastructure'},
   {id:'Railway',        label:'Railway',            type:'skill',cat:'infrastructure'},
+  {id:'Vercel',         label:'Vercel',             type:'skill',cat:'infrastructure'},
   {id:'Miro',           label:'Miro',              type:'skill',cat:'infrastructure'},
   {id:'Formspree',      label:'Formspree',          type:'skill',cat:'infrastructure'},
   // Backend
@@ -828,6 +829,12 @@ const nodeData = [
   {id:'Quip-Automation',label:'Quip Automation',    type:'skill',cat:'ai'},
   {id:'AI-Agent-Dev',   label:'AI Agent Dev',       type:'skill',cat:'ai'},
   {id:'Gemini',         label:'Gemini Flash',       type:'skill',cat:'ai'},
+  {id:'Gemini-Vision',  label:'Gemini Vision',      type:'skill',cat:'ai'},
+  {id:'Vitest',         label:'Vitest',             type:'skill',cat:'infrastructure'},
+  {id:'Testing-Library',label:'Testing Library',    type:'skill',cat:'infrastructure'},
+  {id:'Error-Boundary', label:'Error Boundary',     type:'skill',cat:'frontend'},
+  {id:'Zustand',        label:'Zustand',            type:'skill',cat:'frontend'},
+  {id:'Open-Meteo',     label:'Open-Meteo API',     type:'skill',cat:'backend'},
   // Algorithms
   {id:'Haversine',      label:'Haversine',          type:'skill',cat:'algorithms'},
   {id:'Transit-Routing',label:'Transit Routing',    type:'skill',cat:'algorithms'},
@@ -905,7 +912,7 @@ const rawLinks = [
       'CSS-Variables','Formspree','GitHub-Pages','GitHub-Actions','Event-Planning','Program-Design',
       'Comms-Planning','Proposal-Writing','Product-Design','Curriculum','Fuzzy-Search',
       'Employee-Experience','Internal-Comms','Virtual-Exp-Design','Event-Production'].map(t=>({s:'eec-contributions',t})),
-  ...['React','Tailwind','Framer-Motion','Leaflet','Supabase','RLS','JavaScript','CSS','HTML','PostgreSQL','DB-Schema','Data-Modeling','Program-Design','Systems-Arch','Product-Design','Fuzzy-Search'].map(t=>({s:'ritualware-suite',t})),
+  ...['React','Tailwind','Framer-Motion','Leaflet','Supabase','RLS','JavaScript','CSS','HTML','PostgreSQL','DB-Schema','Data-Modeling','Program-Design','Systems-Arch','Product-Design','Fuzzy-Search','Gemini','Gemini-Vision','Vitest','Testing-Library','Error-Boundary','Zustand','GitHub-Actions','Vercel','Open-Meteo','Custom-Scoring'].map(t=>({s:'ritualware-suite',t})),
   ...['MCP','Enchante','Slack-Workflows','Quip-Automation','AI-Agent-Dev','Program-Design','Systems-Arch',
       'Tech-Writing','Comms-Design','Stakeholder-Mgmt','Gap-Analysis','Program-Iteration',
       'Leadership-Handoff','Onboarding-Design','Comms-Planning','Tech-Proj-Mgmt',
@@ -963,9 +970,9 @@ const skillProjectData = {
   'IntersectionObs': [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Scroll-triggered animations in the knowledge base'}],
   'Geo-Map':         [{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Geography map showing all 100+ team members distributed globally. D3 + TopoJSON + countries-110m.json all bundled locally — zero CDN dependency. Scale-aware dot spread, Singapore neighborhood-level precision. Snapshot in FAB for admin user identity token only.'}],
   'TopoJSON':        [{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Geographic data handling in the D3 knowledge visualization'}],
-  'React':           [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Four lifestyle apps on one shared backend.',where:'React 18 + Vite across all four apps — Ritualwear, Glow Up, Ritualwhere?, m\'atelier'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Public portfolio version'}],
-  'Tailwind':        [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Four lifestyle apps on one shared backend.',where:'Tailwind CSS utility-first styling with CSS variable theming for dark mode across all four apps'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'CSS utility framework with CSS variable theming'}],
-  'Framer-Motion':   [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Four lifestyle apps on one shared backend.',where:'Page transitions, entrance animations, layout animations throughout all Ritualware app pages'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Page transitions and entrance animations'}],
+  'React':           [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'React 18 + Vite across all four apps — Ritualwear, Glow Up, Ritualwhere?, m\'atelier'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Public portfolio version'}],
+  'Tailwind':        [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Tailwind CSS utility-first styling with CSS variable theming for dark mode across all four apps'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'CSS utility framework with CSS variable theming'}],
+  'Framer-Motion':   [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Page transitions, entrance animations, layout animations throughout all Ritualware app pages'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Page transitions and entrance animations'}],
   'Swift':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Phase 3 iOS — Codable structs, @Published reactive state, TransitHelper.swift'}],
   'SwiftUI':         [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'SearchView, ResultsView, ResultCard, ClubsView, SplashView'}],
   'Xcode':           [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'Full iOS project: Models/, Services/, Views/, ViewModel/'}],
@@ -977,7 +984,14 @@ const skillProjectData = {
   'Slack-Workflows': [{id:'seed-your-ideas',name:'Seed Your Ideas: Compliance Edition',summary:'Idea submission program with full AI automation.',where:'Submission interface — name, category, idea, impact — without leaving Slack. Auto-populates spreadsheet.'}],
   'Quip-Automation': [{id:'seed-your-ideas',name:'Seed Your Ideas: Compliance Edition',summary:'Idea submission program with full AI automation.',where:'Quip-to-Slack integration — edits auto-post to channel. Actions Taken is the single source of truth.'}],
   'AI-Agent-Dev':    [{id:'seed-your-ideas',name:'Seed Your Ideas: Compliance Edition',summary:'Idea submission program with full AI automation.',where:'Full agent design: instructions, tone standards (Apple voice), privacy rules, operational logic for all four email stages'}],
-  'Gemini':          [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Four lifestyle apps on one shared backend.',where:'Gemini 2.5 Flash powers The Oracle (outfit recommendations), Glow Up scorecard, neighborhood narratives, burnout insights, quarterly reinvention plans, Ritual Profile AI synthesis'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Ritualware Oracle and Glow Up scorecard generation'}],
+  'Gemini':          [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Gemini 2.5 Flash powers The Oracle (outfit recommendations), Glow Up scorecard, neighborhood narratives, burnout insights, quarterly reinvention plans, Ritual Profile AI synthesis'},{id:'hub-trilogy',name:'The Grid',summary:'FastAPI + SQLite on Apple enterprise infrastructure.',where:'Ritualware Oracle and Glow Up scorecard generation'}],
+  'Gemini-Vision':   [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Inspo Upload — image sent to Gemini Vision, extracts colors/silhouette/vibe_words/pieces/style_direction as JSON, offers one-tap add to Style Bible'}],
+  'Vitest':          [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'73 unit tests across all four app repos — burnout scoring, neighborhood scoring, reinvention logic, style store mapping, auth store methods'}],
+  'Testing-Library': [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'@testing-library/react + jest-dom for React component testing. Supabase fully mocked — no network calls in tests.'}],
+  'Error-Boundary':  [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Branded ErrorBoundary on all four apps — catches React crashes, branded fallback per app theme, dev mode error surfacing'}],
+  'Zustand':         [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'useAuthStore + useStyleStore across Ritualwear and Glow Up — session management, quiz answers, profile data, pending profile flush on auth'}],
+  'Open-Meteo':      [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'Live weather in The Oracle — geocoding API + forecast API, date-matched daily temps, precipitation flag, F conversion'}],
+  'Vercel':          [{id:'ritualware-suite',name:'Ritualware Suite',summary:'Five lifestyle apps on one shared backend.',where:'All five apps deployed on Vercel with custom ritualware.app subdomains. CI via GitHub Actions on all repos.'}],
   'Haversine':       [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'buildTransitCache() — 630 club pairs, 1.3 route-factor, 80m/min. Ported JS→Swift in TransitHelper.swift.'}],
   'Transit-Routing': [{id:'doubles',name:'EQX Doubles',summary:'Three-platform workout app.',where:'630 pair pre-computation: same, walk, quick-train, extended. TIGHT badge when gap < minGap.'}],
   'Fisher-Yates':    [{id:'training-hub',name:'Training Hub',summary:'Single-file training platform.',where:'Shuffles 40 training scenarios every session — no two sessions identical'}],
